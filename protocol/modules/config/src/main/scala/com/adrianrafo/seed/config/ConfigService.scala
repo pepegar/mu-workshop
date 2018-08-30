@@ -3,8 +3,8 @@ package config
 
 import cats.effect.Effect
 import cats.syntax.either._
-import pureconfig.{ConfigReader, Derivation}
 import fs2.Stream
+import pureconfig.{ConfigReader, Derivation}
 
 trait ConfigService[F[_]] {
 
@@ -17,13 +17,11 @@ object ConfigService {
 
     override def serviceConfig[Config](
         implicit reader: Derivation[ConfigReader[Config]]): Stream[F, Config] =
-      for {
-        config <- Stream.eval(
-          Effect[F].fromEither(
-            pureconfig
-              .loadConfig[Config]
-              .leftMap(e => new IllegalStateException(s"Error loading configuration: $e"))))
-      } yield config
+      Stream.eval(
+        Effect[F].fromEither(
+          pureconfig
+            .loadConfig[Config]
+            .leftMap(e => new IllegalStateException(s"Error loading configuration: $e"))))
 
   }
 }
