@@ -15,7 +15,6 @@ object ProjectPlugin extends AutoPlugin {
       val log4cats     = "0.1.0"
       val logbackClassic = "1.2.3"
       val freestyleRPC = "0.14.0"
-      val http4s       = "0.18.15"
       val pureconfig   = "0.9.1"
       val shapeless    = "2.3.3"
     }
