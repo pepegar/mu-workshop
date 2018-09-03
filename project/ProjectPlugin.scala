@@ -29,17 +29,6 @@ object ProjectPlugin extends AutoPlugin {
       "io.chrisdavenport" %% "log4cats-slf4j" % V.log4cats
     ))
 
-  private lazy val codeGenSettings: Seq[Def.Setting[_]] = Seq(
-    resolvers += Resolver.bintrayRepo("beyondthelines", "maven"),
-    idlType := "avro",
-    srcGenSerializationType := "AvroWithSchema",
-    sourceGenerators in Compile += (srcGen in Compile).taskValue,
-    libraryDependencies ++= Seq(
-      "io.frees"    %% "frees-rpc-client-core" % V.freestyleRPC,
-      "com.chuusai" %% "shapeless"             % V.shapeless
-    )
-  )
-
   lazy val configSettings: Seq[Def.Setting[_]] = Seq(
     libraryDependencies ++= Seq(
       "co.fs2"                %% "fs2-core"   % V.fs2,
