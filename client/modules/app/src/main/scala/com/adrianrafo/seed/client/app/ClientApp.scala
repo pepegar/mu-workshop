@@ -15,15 +15,19 @@ class ClientProgram[F[_]: Effect] extends ClientBoot[F] {
 
   def peopleServiceClient(host: String, port: Int)(
       implicit L: Logger[F]): Stream[F, PeopleServiceClient[F]] =
-    PeopleServiceClient.createClient(host, port, sslEnabled = false, 30 minutes, 1 hour)
+    PeopleServiceClient.createClient(
+      host,
+      port,
+      sslEnabled = false,
+      tryToRemoveUnusedEvery = 30 minutes,
+      removeUnusedAfter = 1 hour)
 
   override def serverStream(config: SeedClientConfig)(
       implicit L: Logger[F]): Stream[F, StreamApp.ExitCode] = {
     for {
       peopleClient <- peopleServiceClient(config.client.host, config.client.port)
-      exitCode <- Stream.eval(
-        peopleClient.getPerson(config.params.request).as(StreamApp.ExitCode.Success))
-    } yield exitCode
+      result       <- Stream.eval(peopleClient.getPerson(config.params.request))
+    } yield result.fold(_ => StreamApp.ExitCode.Error, _ => StreamApp.ExitCode.Success)
   }
 }
 

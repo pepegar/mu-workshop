@@ -9,6 +9,6 @@ object models {
 
   case class SeedClientConfig(client: ClientConfig, params: ParamsConfig)
 
-  case class PersonResult(result: String)
+  case class PeopleError(result: String)
 
 }
