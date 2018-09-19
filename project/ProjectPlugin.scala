@@ -14,7 +14,8 @@ object ProjectPlugin extends AutoPlugin {
       val fs2            = "0.10.1"
       val log4cats       = "0.1.0"
       val logbackClassic = "1.2.3"
-      val freestyleRPC   = "0.14.0"
+      val freestyleRPC   = "0.14.1"
+      val scopt          = "3.7.0"
       val pureconfig     = "0.9.1"
       val shapeless      = "2.3.3"
     }
@@ -34,7 +35,7 @@ object ProjectPlugin extends AutoPlugin {
       "co.fs2"                %% "fs2-core"   % V.fs2,
       "com.github.pureconfig" %% "pureconfig" % V.pureconfig))
 
-  lazy val rpcProtocolSettings: Seq[Def.Setting[_]] = Seq(
+  lazy val serverProtocolSettings: Seq[Def.Setting[_]] = Seq(
     idlType := "avro",
     srcGenSerializationType := "AvroWithSchema",
     sourceGenerators in Compile += (srcGen in Compile).taskValue,
@@ -50,9 +51,12 @@ object ProjectPlugin extends AutoPlugin {
     )
   )
 
-  lazy val clientAppSettings: Seq[Def.Setting[_]] = logSettings
+  lazy val clientAppSettings: Seq[Def.Setting[_]] = logSettings ++ Seq(
+    libraryDependencies ++= Seq(
+      "com.github.scopt" %% "scopt" % V.scopt
+    ))
 
-  lazy val serverSettings: Seq[Def.Setting[_]] = logSettings ++ Seq(libraryDependencies ++= Seq())
+  lazy val serverSettings: Seq[Def.Setting[_]] = logSettings
 
   lazy val serverAppSettings: Seq[Def.Setting[_]] = logSettings ++ Seq(
     libraryDependencies ++= Seq("io.frees" %% "frees-rpc-server" % V.freestyleRPC))

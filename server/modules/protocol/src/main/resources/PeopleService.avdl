@@ -1,0 +1,7 @@
+@namespace("com.adrianrafo.seed.server.protocol")
+protocol PeopleService {
+  import idl "People.avdl";
+
+  com.adrianrafo.seed.server.protocol.PeopleResponse getPerson(com.adrianrafo.seed.server.protocol.PeopleRequest request);
+
+}

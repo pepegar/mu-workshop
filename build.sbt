@@ -1,58 +1,33 @@
 import ProjectPlugin._
 
-//////////////////////////
-//// Protocol Modules ////
-//////////////////////////
+////////////////////////
+//// Shared Modules ////
+////////////////////////
 
-lazy val common = project in file("protocol/modules/common")
+lazy val config = project in file("shared/modules/config") settings configSettings
 
-lazy val config = project in file("protocol/modules/config") settings configSettings
+////////////////////////
+////     Shared     ////
+////////////////////////
 
-lazy val protocol_rpc = project in file("protocol/modules/rpc") settings rpcProtocolSettings
-
-//////////////////////////
-////     Protocol     ////
-//////////////////////////
-
-lazy val allProtocolModules: Seq[ProjectReference] = Seq(
-  common,
-  config,
-  protocol_rpc
+lazy val allSharedModules: Seq[ProjectReference] = Seq(
+  config
 )
 
-lazy val allProtocolModulesDeps: Seq[ClasspathDependency] =
-  allProtocolModules.map(ClasspathDependency(_, None))
+lazy val allSharedModulesDeps: Seq[ClasspathDependency] =
+  allSharedModules.map(ClasspathDependency(_, None))
 
-lazy val protocol = project in file("protocol") aggregate (allProtocolModules: _*) dependsOn (allProtocolModulesDeps: _*)
-
-//////////////////////////
-////  Client Modules  ////
-//////////////////////////
-
-lazy val client_process = project in file("client/modules/process") settings clientRPCSettings dependsOn (common, protocol_rpc)
-
-lazy val client_app = project in file("client/modules/app") settings clientAppSettings dependsOn (client_process, config)
-
-//////////////////////////
-////      Client      ////
-//////////////////////////
-
-lazy val allClientModules: Seq[ProjectReference] = Seq(
-  client_process,
-  client_app
-)
-
-lazy val allClientModulesDeps: Seq[ClasspathDependency] =
-  allClientModules.map(ClasspathDependency(_, None))
-
-lazy val client = project in file("client") aggregate (allClientModules: _*) dependsOn (allClientModulesDeps: _*)
-addCommandAlias("runClient", "client_app/runMain com.adrianrafo.seed.client.app.ClientApp")
+lazy val shared = project in file("shared") aggregate (allSharedModules: _*) dependsOn (allSharedModulesDeps: _*)
 
 //////////////////////////
 ////  Server Modules  ////
 //////////////////////////
 
-lazy val server_process = project in file("server/modules/process") settings serverSettings dependsOn (common, protocol_rpc)
+lazy val server_common = project in file("server/modules/common")
+
+lazy val server_protocol = project in file("server/modules/protocol") settings serverProtocolSettings
+
+lazy val server_process = project in file("server/modules/process") settings serverSettings dependsOn (server_common, server_protocol)
 
 lazy val server_app = project in file("server/modules/app") settings serverAppSettings dependsOn (server_process, config)
 
@@ -61,6 +36,8 @@ lazy val server_app = project in file("server/modules/app") settings serverAppSe
 //////////////////////////
 
 lazy val allServerModules: Seq[ProjectReference] = Seq(
+  server_common,
+  server_protocol,
   server_process,
   server_app
 )
@@ -71,12 +48,38 @@ lazy val allServerModulesDeps: Seq[ClasspathDependency] =
 lazy val server = project in file("server") aggregate (allServerModules: _*) dependsOn (allServerModulesDeps: _*)
 addCommandAlias("runServer", "server_app/runMain com.adrianrafo.seed.server.app.ServerApp")
 
+//////////////////////////
+////  Client Modules  ////
+//////////////////////////
+
+lazy val client_common = project in file("client/modules/common")
+
+lazy val client_process = project in file("client/modules/process") settings clientRPCSettings dependsOn (client_common, server_protocol)
+
+lazy val client_app = project in file("client/modules/app") settings clientAppSettings dependsOn (client_process, config)
+
+//////////////////////////
+////      Client      ////
+//////////////////////////
+
+lazy val allClientModules: Seq[ProjectReference] = Seq(
+  client_common,
+  client_process,
+  client_app
+)
+
+lazy val allClientModulesDeps: Seq[ClasspathDependency] =
+  allClientModules.map(ClasspathDependency(_, None))
+
+lazy val client = project in file("client") aggregate (allClientModules: _*) dependsOn (allClientModulesDeps: _*)
+addCommandAlias("runClient", "client_app/runMain com.adrianrafo.seed.client.app.ClientApp")
+
 /////////////////////////
 ////       Root       ////
 /////////////////////////
 
 lazy val allRootModules: Seq[ProjectReference] = Seq(
-  protocol,
+  shared,
   client,
   server,
 )

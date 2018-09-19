@@ -1,7 +1,8 @@
-package com.adrianrafo.seed.client.app
+package com.adrianrafo.seed.client
+package app
 
 import cats.effect._
-import com.adrianrafo.seed.common.SeedConfig
+import com.adrianrafo.seed.client.common.models._
 import com.adrianrafo.seed.config.ConfigService
 import fs2.Stream
 import fs2.StreamApp
@@ -17,10 +18,12 @@ abstract class ClientBoot[F[_]: Effect] extends StreamApp[F] {
 
   override def stream(args: List[String], requestShutdown: F[Unit]): Stream[F, StreamApp.ExitCode] =
     for {
-      config   <- ConfigService[F].serviceConfig[SeedConfig]
-      logger   <- Stream.eval(Slf4jLogger.fromName[F](config.name))
+      config <- ConfigService[F]
+        .serviceConfig[ClientConfig]
+        .map(client => SeedClientConfig(client, ClientParams.loadParams(client.name, args)))
+      logger   <- Stream.eval(Slf4jLogger.fromName[F](config.client.name))
       exitCode <- serverStream(config)(logger)
     } yield exitCode
 
-  def serverStream(config: SeedConfig)(implicit L: Logger[F]): Stream[F, StreamApp.ExitCode]
+  def serverStream(config: SeedClientConfig)(implicit L: Logger[F]): Stream[F, StreamApp.ExitCode]
 }

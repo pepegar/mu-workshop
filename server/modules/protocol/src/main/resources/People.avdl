@@ -1,0 +1,25 @@
+@namespace("com.adrianrafo.seed.server.protocol")
+protocol People {
+
+  record Person {
+    string name;
+    int age;
+  }
+
+  record NotFoundError{
+    string message;
+  }
+
+  record DuplicatedPersonError{
+    string message;
+  }
+
+  record PeopleRequest {
+    string name;
+  }
+
+  record PeopleResponse {
+    union{ Person, NotFoundError, DuplicatedPersonError } result;
+  }
+
+}

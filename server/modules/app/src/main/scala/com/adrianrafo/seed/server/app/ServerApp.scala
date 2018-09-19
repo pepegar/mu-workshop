@@ -1,10 +1,11 @@
-package com.adrianrafo.seed.server.app
+package com.adrianrafo.seed.server
+package app
 
 import cats.effect._
 import cats.syntax.flatMap._
 import cats.syntax.functor._
-import com.adrianrafo.seed.common.SeedConfig
-import com.adrianrafo.seed.protocol.PeopleService
+import com.adrianrafo.seed.server.common.models._
+import com.adrianrafo.seed.server.protocol._
 import com.adrianrafo.seed.server.process.PeopleServiceHandler
 import fs2.{Stream, StreamApp}
 import io.chrisdavenport.log4cats.Logger
@@ -12,7 +13,7 @@ import freestyle.rpc.server._
 
 class ServerProgram[F[_]: Effect] extends ServerBoot[F] {
 
-  override def serverStream(config: SeedConfig)(
+  override def serverStream(config: ServerConfig)(
       implicit L: Logger[F]): Stream[F, StreamApp.ExitCode] = {
 
     val serverName = s"${config.name}"

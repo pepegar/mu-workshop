@@ -1,35 +1,48 @@
-package com.adrianrafo.seed.client.process.runtime
+package com.adrianrafo.seed.client
+package process
+package runtime
 
 import cats.effect._
 import cats.syntax.applicative._
 import cats.syntax.flatMap._
 import cats.syntax.functor._
-import com.adrianrafo.seed.protocol._
-import com.adrianrafo.seed.client.process.ClientRPC
+import com.adrianrafo.seed.server.protocol._
 import io.grpc.{CallOptions, ManagedChannel}
 import monix.execution.Scheduler
 import io.chrisdavenport.log4cats.Logger
+import shapeless.Poly1
 
 import scala.concurrent.duration.FiniteDuration
 
 trait PeopleServiceClient[F[_]] {
 
-  def getPerson(name: String): F[Person]
+  def getPerson(name: String): F[PeopleResponse]
 
 }
 object PeopleServiceClient {
+
+  val serviceName = "PeopleClient"
 
   def apply[F[_]: Effect](clientF: F[PeopleService.Client[F]])(
       implicit L: Logger[F]): PeopleServiceClient[F] =
     new PeopleServiceClient[F] {
 
-      def getPerson(name: String): F[Person] =
+      object PeopleResponseErrorHandler extends Poly1 {
+        implicit val peh1 = at[NotFoundError](e => L.info(s"$serviceName - Result: ${e.message}"))
+        implicit val peh2 =
+          at[DuplicatedPersonError](e => L.info(s"$serviceName - Result: ${e.message}"))
+        implicit val peh3 =
+          at[Person](p =>
+            L.info(s"$serviceName - Result: Person(name = ${p.name}, age = ${p.age})"))
+      }
+
+      def getPerson(name: String): F[PeopleResponse] =
         for {
-          client <- clientF
-          _      <- L.info(s"Request: $name")
-          result <- client.getPerson(PeopleRequest(name))
-          _      <- L.info(s"Result: $result")
-        } yield result.person
+          client   <- clientF
+          response <- client.getPerson(PeopleRequest(name))
+          _        <- L.info(s"$serviceName - Request: $name")
+          _        <- response.result.map(PeopleResponseErrorHandler).unify
+        } yield response
 
     }
 

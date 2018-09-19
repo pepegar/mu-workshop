@@ -1,9 +1,10 @@
-package com.adrianrafo.seed.client.app
+package com.adrianrafo.seed.client
+package app
 
 import cats.effect._
 import cats.syntax.functor._
+import com.adrianrafo.seed.client.common.models._
 import com.adrianrafo.seed.client.process.runtime.PeopleServiceClient
-import com.adrianrafo.seed.common.SeedConfig
 import fs2.{Stream, StreamApp}
 import io.chrisdavenport.log4cats.Logger
 
@@ -16,11 +17,12 @@ class ClientProgram[F[_]: Effect] extends ClientBoot[F] {
       implicit L: Logger[F]): Stream[F, PeopleServiceClient[F]] =
     PeopleServiceClient.createClient(host, port, sslEnabled = false, 30 minutes, 1 hour)
 
-  override def serverStream(config: SeedConfig)(
+  override def serverStream(config: SeedClientConfig)(
       implicit L: Logger[F]): Stream[F, StreamApp.ExitCode] = {
     for {
-      peopleClient <- peopleServiceClient(config.host, config.port)
-      exitCode     <- Stream.eval(peopleClient.getPerson("foo").as(StreamApp.ExitCode.Success))
+      peopleClient <- peopleServiceClient(config.client.host, config.client.port)
+      exitCode <- Stream.eval(
+        peopleClient.getPerson(config.params.request).as(StreamApp.ExitCode.Success))
     } yield exitCode
   }
 }
