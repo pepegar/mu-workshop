@@ -2,7 +2,6 @@ package com.adrianrafo.seed.client
 package app
 
 import cats.effect._
-import cats.syntax.functor._
 import com.adrianrafo.seed.client.common.models._
 import com.adrianrafo.seed.client.process.runtime.PeopleServiceClient
 import fs2.{Stream, StreamApp}
