@@ -11,17 +11,13 @@ object handlers {
 
   object PeopleResponseLogger extends Poly1 {
     implicit val peh1 = at[NotFoundError](_.message)
-    implicit val peh2 =
-      at[DuplicatedPersonError](_.message)
-    implicit val peh3 =
-      at[Person](_.toString)
+    implicit val peh2 = at[DuplicatedPersonError](_.message)
+    implicit val peh3 = at[Person](_.toString)
   }
 
   object PeopleResponseHandler extends Poly1 {
     implicit val peh1 = at[NotFoundError](e => PeopleError(e.message).asLeft[Person])
-    implicit val peh2 =
-      at[DuplicatedPersonError](e => PeopleError(e.message).asLeft[Person])
-    implicit val peh3 =
-      at[Person](_.asRight[PeopleError])
+    implicit val peh2 = at[DuplicatedPersonError](e => PeopleError(e.message).asLeft[Person])
+    implicit val peh3 = at[Person](_.asRight[PeopleError])
   }
 }
