@@ -13,13 +13,13 @@ class PeopleServiceHandler[F[_]: Sync](implicit L: Logger[F]) extends PeopleServ
 
   type PersonResult = Person :+: NotFoundError :+: DuplicatedPersonError :+: CNil
 
-  val people = List(
+  val people: List[Person] = List(
     Person("Foo", 10),
     Person("Bar", 20),
     Person("Bar", 10),
   )
 
-  override def getPerson(request: PeopleRequest): F[PeopleResponse] = {
+  def getPerson(request: PeopleRequest): F[PeopleResponse] = {
     def findPerson: PersonResult =
       people.count(_.name == request.name) match {
         case x if x < 2 =>

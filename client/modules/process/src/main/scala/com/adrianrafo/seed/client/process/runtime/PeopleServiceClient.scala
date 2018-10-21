@@ -38,14 +38,13 @@ object PeopleServiceClient {
 
     }
 
-  def createClient[F[_]](
+  def createClient[F[_]: Effect](
       hostname: String,
       port: Int,
       sslEnabled: Boolean = true,
       tryToRemoveUnusedEvery: FiniteDuration,
       removeUnusedAfter: FiniteDuration)(
-      implicit F: Effect[F],
-      L: Logger[F],
+      implicit L: Logger[F],
       TM: Timer[F],
       S: Scheduler): fs2.Stream[F, PeopleServiceClient[F]] = {
 
