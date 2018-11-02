@@ -6,10 +6,10 @@ import java.net.InetAddress
 import cats.effect.{Effect, Timer}
 import cats.syntax.flatMap._
 import cats.syntax.functor._
-import freestyle.rpc.ChannelForAddress
-import freestyle.rpc.client.{ManagedChannelInterpreter, UsePlaintext}
-import freestyle.rpc.client.cache.ClientCache
-import freestyle.rpc.client.cache.ClientCache.HostPort
+import mu.rpc.ChannelForAddress
+import mu.rpc.client.{ManagedChannelInterpreter, UsePlaintext}
+import mu.rpc.client.cache.ClientCache
+import mu.rpc.client.cache.ClientCache.HostPort
 import io.grpc.ManagedChannel
 import monix.execution.Scheduler
 

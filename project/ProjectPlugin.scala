@@ -1,6 +1,6 @@
 import sbt._
 import sbt.Keys._
-import freestyle.rpc.idlgen.IdlGenPlugin.autoImport._
+import mu.rpc.idlgen.IdlGenPlugin.autoImport._
 import org.scalafmt.sbt.ScalafmtPlugin.autoImport._
 import sbt.{AutoPlugin, PluginTrigger}
 
@@ -14,7 +14,7 @@ object ProjectPlugin extends AutoPlugin {
       val fs2            = "0.10.1"
       val log4cats       = "0.1.0"
       val logbackClassic = "1.2.3"
-      val freestyleRPC   = "0.15.1"
+      val muRPC          = "0.16.0"
       val scopt          = "3.7.0"
       val pureconfig     = "0.9.1"
       val shapeless      = "2.3.3"
@@ -40,14 +40,14 @@ object ProjectPlugin extends AutoPlugin {
     srcGenSerializationType := "AvroWithSchema",
     sourceGenerators in Compile += (srcGen in Compile).taskValue,
     libraryDependencies ++= Seq(
-      "io.frees" %% "frees-rpc-client-core" % V.freestyleRPC
+      "io.higherkindness" %% "mu-rpc-client-core" % V.muRPC
     )
   )
 
   lazy val clientRPCSettings: Seq[Def.Setting[_]] = logSettings ++ Seq(
     libraryDependencies ++= Seq(
-      "io.frees" %% "frees-rpc-client-netty" % V.freestyleRPC,
-      "io.frees" %% "frees-rpc-client-cache" % V.freestyleRPC
+      "io.higherkindness" %% "mu-rpc-client-netty" % V.muRPC,
+      "io.higherkindness" %% "mu-rpc-client-cache" % V.muRPC
     )
   )
 
@@ -59,7 +59,7 @@ object ProjectPlugin extends AutoPlugin {
   lazy val serverSettings: Seq[Def.Setting[_]] = logSettings
 
   lazy val serverAppSettings: Seq[Def.Setting[_]] = logSettings ++ Seq(
-    libraryDependencies ++= Seq("io.frees" %% "frees-rpc-server" % V.freestyleRPC))
+    libraryDependencies ++= Seq("io.higherkindness" %% "mu-rpc-server" % V.muRPC))
 
   override def projectSettings: Seq[Def.Setting[_]] =
     Seq(

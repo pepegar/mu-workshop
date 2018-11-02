@@ -9,7 +9,7 @@ import com.adrianrafo.seed.server.protocol._
 import com.adrianrafo.seed.server.process.PeopleServiceHandler
 import fs2.{Stream, StreamApp}
 import io.chrisdavenport.log4cats.Logger
-import freestyle.rpc.server._
+import mu.rpc.server._
 
 class ServerProgram[F[_]: Effect] extends ServerBoot[F] {
 
