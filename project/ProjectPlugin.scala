@@ -1,8 +1,7 @@
-import sbt._
-import sbt.Keys._
-import mu.rpc.idlgen.IdlGenPlugin.autoImport._
+import higherkindness.mu.rpc.idlgen.IdlGenPlugin.autoImport._
 import org.scalafmt.sbt.ScalafmtPlugin.autoImport._
-import sbt.{AutoPlugin, PluginTrigger}
+import sbt.Keys._
+import sbt.{AutoPlugin, PluginTrigger, _}
 
 object ProjectPlugin extends AutoPlugin {
 
@@ -11,10 +10,10 @@ object ProjectPlugin extends AutoPlugin {
   object autoImport {
 
     lazy val V = new {
-      val fs2            = "0.10.1"
+      val cats           = "1.2.0"
       val log4cats       = "0.1.0"
       val logbackClassic = "1.2.3"
-      val muRPC          = "0.16.0"
+      val muRPC          = "0.17.2"
       val scopt          = "3.7.0"
       val pureconfig     = "0.9.1"
       val shapeless      = "2.3.3"
@@ -32,21 +31,21 @@ object ProjectPlugin extends AutoPlugin {
 
   lazy val configSettings: Seq[Def.Setting[_]] = Seq(
     libraryDependencies ++= Seq(
-      "co.fs2"                %% "fs2-core"   % V.fs2,
-      "com.github.pureconfig" %% "pureconfig" % V.pureconfig))
+      "org.typelevel"         %% "cats-effect" % V.cats,
+      "com.github.pureconfig" %% "pureconfig"  % V.pureconfig))
 
   lazy val serverProtocolSettings: Seq[Def.Setting[_]] = Seq(
     idlType := "avro",
     srcGenSerializationType := "AvroWithSchema",
     sourceGenerators in Compile += (srcGen in Compile).taskValue,
     libraryDependencies ++= Seq(
-      "io.higherkindness" %% "mu-rpc-client-core" % V.muRPC
+      "io.higherkindness" %% "mu-rpc-channel" % V.muRPC
     )
   )
 
   lazy val clientRPCSettings: Seq[Def.Setting[_]] = logSettings ++ Seq(
     libraryDependencies ++= Seq(
-      "io.higherkindness" %% "mu-rpc-client-netty" % V.muRPC,
+      "io.higherkindness" %% "mu-rpc-netty"        % V.muRPC,
       "io.higherkindness" %% "mu-rpc-client-cache" % V.muRPC
     )
   )

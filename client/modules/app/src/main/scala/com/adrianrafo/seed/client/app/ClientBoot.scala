@@ -2,28 +2,31 @@ package com.adrianrafo.seed.client
 package app
 
 import cats.effect._
+import cats.syntax.functor._
 import com.adrianrafo.seed.client.common.models._
 import com.adrianrafo.seed.config.ConfigService
 import fs2.Stream
-import fs2.StreamApp
 import io.chrisdavenport.log4cats.Logger
 import io.chrisdavenport.log4cats.slf4j.Slf4jLogger
-import monix.execution.Scheduler
 
-abstract class ClientBoot[F[_]: Effect] extends StreamApp[F] {
+abstract class ClientBoot[F[_]: Effect] {
 
-  implicit val S: Scheduler = monix.execution.Scheduler.Implicits.global
-
-  implicit val TM: Timer[F] = Timer.derive[F](Effect[F], IO.timer(S))
-
-  override def stream(args: List[String], requestShutdown: F[Unit]): Stream[F, StreamApp.ExitCode] =
-    for {
-      config <- ConfigService[F]
+  def program(
+      args: List[String])(implicit TM: Timer[F], CE: ConcurrentEffect[F]): Stream[F, ExitCode] = {
+    def setupConfig =
+      ConfigService[F]
         .serviceConfig[ClientConfig]
         .map(client => SeedClientConfig(client, ClientParams.loadParams(client.name, args)))
-      logger   <- Stream.eval(Slf4jLogger.fromName[F](config.client.name))
-      exitCode <- serverStream(config)(logger)
-    } yield exitCode
 
-  def serverStream(config: SeedClientConfig)(implicit L: Logger[F]): Stream[F, StreamApp.ExitCode]
+    for {
+      config   <- Stream.eval(setupConfig)
+      logger   <- Stream.eval(Slf4jLogger.fromName[F](config.client.name))
+      exitCode <- clientProgram(config)(logger, TM, CE)
+    } yield exitCode
+  }
+
+  def clientProgram(config: SeedClientConfig)(
+      implicit L: Logger[F],
+      TM: Timer[F],
+      F: ConcurrentEffect[F]): Stream[F, ExitCode]
 }

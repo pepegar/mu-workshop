@@ -10,9 +10,9 @@ import com.adrianrafo.seed.client.common.models.PeopleError
 import com.adrianrafo.seed.client.process.runtime.handlers._
 import com.adrianrafo.seed.server.protocol._
 import io.grpc.{CallOptions, ManagedChannel}
-import monix.execution.Scheduler
 import io.chrisdavenport.log4cats.Logger
 
+import scala.concurrent.ExecutionContext
 import scala.concurrent.duration.FiniteDuration
 
 trait PeopleServiceClient[F[_]] {
@@ -24,7 +24,7 @@ object PeopleServiceClient {
 
   val serviceName = "PeopleClient"
 
-  def apply[F[_]: Effect](clientF: F[PeopleService.Client[F]])(
+  def apply[F[_]: Effect](clientF: F[PeopleService[F]])(
       implicit L: Logger[F]): PeopleServiceClient[F] =
     new PeopleServiceClient[F] {
 
@@ -45,10 +45,11 @@ object PeopleServiceClient {
       tryToRemoveUnusedEvery: FiniteDuration,
       removeUnusedAfter: FiniteDuration)(
       implicit L: Logger[F],
+      F: ConcurrentEffect[F],
       TM: Timer[F],
-      S: Scheduler): fs2.Stream[F, PeopleServiceClient[F]] = {
+      EC: ExecutionContext): fs2.Stream[F, PeopleServiceClient[F]] = {
 
-    def fromChannel(channel: ManagedChannel): PeopleService.Client[F] =
+    def fromChannel(channel: F[ManagedChannel]): Resource[F, PeopleService[F]] =
       PeopleService.clientFromChannel(channel, CallOptions.DEFAULT)
 
     ClientRPC

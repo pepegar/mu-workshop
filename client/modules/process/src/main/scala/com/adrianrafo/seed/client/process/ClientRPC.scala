@@ -3,16 +3,15 @@ package process
 
 import java.net.InetAddress
 
-import cats.effect.{Effect, Timer}
+import cats.effect._
 import cats.syntax.flatMap._
-import cats.syntax.functor._
-import mu.rpc.ChannelForAddress
-import mu.rpc.client.{ManagedChannelInterpreter, UsePlaintext}
-import mu.rpc.client.cache.ClientCache
-import mu.rpc.client.cache.ClientCache.HostPort
+import higherkindness.mu.rpc.ChannelForAddress
+import higherkindness.mu.rpc.channel.cache.ClientCache
+import higherkindness.mu.rpc.channel.cache.ClientCache.HostPort
+import higherkindness.mu.rpc.channel.{ManagedChannelInterpreter, UsePlaintext}
 import io.grpc.ManagedChannel
-import monix.execution.Scheduler
 
+import scala.concurrent.ExecutionContext
 import scala.concurrent.duration.FiniteDuration
 
 object ClientRPC {
@@ -22,27 +21,25 @@ object ClientRPC {
       sslEnabled: Boolean,
       tryToRemoveUnusedEvery: FiniteDuration,
       removeUnusedAfter: FiniteDuration,
-      fromChannel: ManagedChannel => Client[F])(
-      implicit F: Effect[F],
+      fromChannel: F[ManagedChannel] => Resource[F, Client[F]])(
+      implicit F: ConcurrentEffect[F],
       TM: Timer[F],
-      S: Scheduler): fs2.Stream[F, ClientCache[Client, F]] = {
+      EC: ExecutionContext): fs2.Stream[F, ClientCache[Client, F]] = {
 
-    def serviceClient(hostname: String, port: Int): F[(Client[F], F[Unit])] = {
+    def serviceClient(hostname: String, port: Int): Resource[F, Client[F]] = {
 
-      def service(ip: String): F[(Client[F], F[Unit])] = {
-        val channelFor    = ChannelForAddress(ip, port)
-        val channelConfig = if (!sslEnabled) List(UsePlaintext()) else Nil
-        F.delay(
-            new ManagedChannelInterpreter[F](channelFor, channelConfig)
-              .build(channelFor, channelConfig))
-          .map(channel => (fromChannel(channel), F.delay(channel.shutdown).void))
-      }
+      val channel: F[ManagedChannel] =
+        F.delay(InetAddress.getByName(hostname).getHostAddress).flatMap { ip =>
+          val channelFor    = ChannelForAddress(ip, port)
+          val channelConfig = if (!sslEnabled) List(UsePlaintext()) else Nil
+          new ManagedChannelInterpreter[F](channelFor, channelConfig).build
+        }
 
-      F.delay(InetAddress.getByName(hostname).getHostAddress).flatMap(service)
+      fromChannel(channel)
     }
 
     ClientCache
-      .impl[Client, F](
+      .fromResource[Client, F](
         hostAndPort,
         Function.tupled(serviceClient),
         tryToRemoveUnusedEvery,
