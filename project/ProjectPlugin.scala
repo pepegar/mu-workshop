@@ -1,7 +1,7 @@
 import higherkindness.mu.rpc.idlgen.IdlGenPlugin.autoImport._
 import org.scalafmt.sbt.ScalafmtPlugin.autoImport._
 import sbt.Keys._
-import sbt.{AutoPlugin, PluginTrigger, _}
+import sbt._
 
 object ProjectPlugin extends AutoPlugin {
 
@@ -11,11 +11,11 @@ object ProjectPlugin extends AutoPlugin {
 
     lazy val V = new {
       val cats           = "1.2.0"
-      val log4cats       = "0.1.0"
+      val log4cats       = "0.3.0"
       val logbackClassic = "1.2.3"
       val muRPC          = "0.17.2"
       val scopt          = "3.7.0"
-      val pureconfig     = "0.9.1"
+      val pureconfig     = "0.10.2"
       val shapeless      = "2.3.3"
     }
   }
