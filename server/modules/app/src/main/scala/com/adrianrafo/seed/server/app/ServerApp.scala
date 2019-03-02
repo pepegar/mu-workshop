@@ -11,10 +11,9 @@ import higherkindness.mu.rpc.server._
 import io.chrisdavenport.log4cats.Logger
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class ServerProgram[F[_]: Effect] extends ServerBoot[F] {
+class ServerProgram[F[_]: ConcurrentEffect] extends ServerBoot[F] {
 
-  override def serverProgram(
-      config: ServerConfig)(implicit L: Logger[F], CE: ConcurrentEffect[F]): F[ExitCode] = {
+  override def serverProgram(config: ServerConfig)(implicit L: Logger[F]): F[ExitCode] = {
 
     val serverName = s"${config.name}"
 
@@ -30,8 +29,8 @@ class ServerProgram[F[_]: Effect] extends ServerBoot[F] {
   }
 }
 
-object ServerApp extends ServerProgram[IO] with IOApp {
+object ServerApp extends IOApp {
   implicit val ce: ConcurrentEffect[IO] = IO.ioConcurrentEffect
 
-  def run(args: List[String]): IO[ExitCode] = program(args)
+  def run(args: List[String]): IO[ExitCode] = new ServerProgram[IO].runProgram(args)
 }

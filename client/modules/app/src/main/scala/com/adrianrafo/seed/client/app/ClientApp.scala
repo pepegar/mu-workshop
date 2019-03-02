@@ -11,12 +11,11 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
 import scala.language.postfixOps
 
-class ClientProgram[F[_]: Effect] extends ClientBoot[F] {
+class ClientProgram[F[_]: ConcurrentEffect] extends ClientBoot[F] {
 
   def peopleServiceClient(host: String, port: Int)(
       implicit L: Logger[F],
-      TM: Timer[F],
-      F: ConcurrentEffect[F]): Stream[F, PeopleServiceClient[F]] =
+      TM: Timer[F]): Stream[F, PeopleServiceClient[F]] =
     PeopleServiceClient.createClient(
       host,
       port,
@@ -24,10 +23,8 @@ class ClientProgram[F[_]: Effect] extends ClientBoot[F] {
       tryToRemoveUnusedEvery = 30 minutes,
       removeUnusedAfter = 1 hour)
 
-  def clientProgram(config: SeedClientConfig)(
-      implicit L: Logger[F],
-      TM: Timer[F],
-      F: ConcurrentEffect[F]): Stream[F, ExitCode] = {
+  def clientProgram(
+      config: SeedClientConfig)(implicit L: Logger[F], TM: Timer[F]): Stream[F, ExitCode] = {
     for {
       peopleClient <- peopleServiceClient(config.client.host, config.client.port)
       result       <- Stream.eval(peopleClient.getPerson(config.params.request))
@@ -35,8 +32,13 @@ class ClientProgram[F[_]: Effect] extends ClientBoot[F] {
   }
 }
 
-object ClientApp extends ClientProgram[IO] with IOApp {
+object ClientApp extends IOApp {
   implicit val ce: ConcurrentEffect[IO] = IO.ioConcurrentEffect
+
   def run(args: List[String]): IO[ExitCode] =
-    program(args).compile.toList.map(_.headOption.getOrElse(ExitCode.Error))
+    new ClientProgram[IO]
+      .runProgram(args)
+      .compile
+      .toList
+      .map(_.headOption.getOrElse(ExitCode.Error))
 }

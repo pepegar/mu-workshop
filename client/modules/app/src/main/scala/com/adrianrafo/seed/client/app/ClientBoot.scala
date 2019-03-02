@@ -10,10 +10,9 @@ import io.chrisdavenport.log4cats.Logger
 import io.chrisdavenport.log4cats.slf4j.Slf4jLogger
 import pureconfig.generic.auto._
 
-abstract class ClientBoot[F[_]: Effect] {
+abstract class ClientBoot[F[_]: ConcurrentEffect] {
 
-  def program(
-      args: List[String])(implicit TM: Timer[F], CE: ConcurrentEffect[F]): Stream[F, ExitCode] = {
+  def runProgram(args: List[String])(implicit TM: Timer[F]): Stream[F, ExitCode] = {
     def setupConfig =
       ConfigService[F]
         .serviceConfig[ClientConfig]
@@ -22,12 +21,10 @@ abstract class ClientBoot[F[_]: Effect] {
     for {
       config   <- Stream.eval(setupConfig)
       logger   <- Stream.eval(Slf4jLogger.fromName[F](config.client.name))
-      exitCode <- clientProgram(config)(logger, TM, CE)
+      exitCode <- clientProgram(config)(logger, TM)
     } yield exitCode
   }
 
-  def clientProgram(config: SeedClientConfig)(
-      implicit L: Logger[F],
-      TM: Timer[F],
-      F: ConcurrentEffect[F]): Stream[F, ExitCode]
+  def clientProgram(
+      config: SeedClientConfig)(implicit L: Logger[F], TM: Timer[F]): Stream[F, ExitCode]
 }
