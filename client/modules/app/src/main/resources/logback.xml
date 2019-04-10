@@ -6,7 +6,7 @@
     <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
       <layout name="l_info" class="ch.qos.logback.classic.PatternLayout">
         <Pattern>
-          [%highlight(%-4level)] %msg%n
+          [%highlight(%-5level)] %msg%n
         </Pattern>
       </layout>
     </encoder>

@@ -4,16 +4,24 @@ package app
 import cats.effect._
 import cats.syntax.functor._
 import com.adrianrafo.seed.client.common.models._
+import com.adrianrafo.seed.client.process.runtime.PeopleServiceClient
 import com.adrianrafo.seed.config.ConfigService
 import fs2.Stream
 import io.chrisdavenport.log4cats.Logger
 import io.chrisdavenport.log4cats.slf4j.Slf4jLogger
 import pureconfig.generic.auto._
 
+import scala.concurrent.ExecutionContext
+
 abstract class ClientBoot[F[_]: ConcurrentEffect] {
 
-  def runProgram(args: List[String])(implicit TM: Timer[F]): Stream[F, ExitCode] = {
-    def setupConfig =
+  def peopleServiceClient(host: String, port: Int)(
+      implicit L: Logger[F],
+      EC: ExecutionContext): Stream[F, PeopleServiceClient[F]] =
+    PeopleServiceClient.createClient(host, port, sslEnabled = false)
+
+  def runProgram(args: List[String]): Stream[F, ExitCode] = {
+    def setupConfig: F[SeedClientConfig] =
       ConfigService[F]
         .serviceConfig[ClientConfig]
         .map(client => SeedClientConfig(client, ClientParams.loadParams(client.name, args)))
@@ -21,10 +29,9 @@ abstract class ClientBoot[F[_]: ConcurrentEffect] {
     for {
       config   <- Stream.eval(setupConfig)
       logger   <- Stream.eval(Slf4jLogger.fromName[F](config.client.name))
-      exitCode <- clientProgram(config)(logger, TM)
+      exitCode <- clientProgram(config)(logger)
     } yield exitCode
   }
 
-  def clientProgram(
-      config: SeedClientConfig)(implicit L: Logger[F], TM: Timer[F]): Stream[F, ExitCode]
+  def clientProgram(config: SeedClientConfig)(implicit L: Logger[F]): Stream[F, ExitCode]
 }

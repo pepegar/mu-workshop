@@ -9,8 +9,9 @@ object ProjectPlugin extends AutoPlugin {
 
   object autoImport {
 
+    //noinspection TypeAnnotation
     lazy val V = new {
-      val cats           = "1.2.0"
+      val catsEffect     = "1.2.0"
       val log4cats       = "0.3.0"
       val logbackClassic = "1.2.3"
       val muRPC          = "0.17.2"
@@ -31,7 +32,7 @@ object ProjectPlugin extends AutoPlugin {
 
   lazy val configSettings: Seq[Def.Setting[_]] = Seq(
     libraryDependencies ++= Seq(
-      "org.typelevel"         %% "cats-effect" % V.cats,
+      "org.typelevel"         %% "cats-effect" % V.catsEffect,
       "com.github.pureconfig" %% "pureconfig"  % V.pureconfig))
 
   lazy val serverProtocolSettings: Seq[Def.Setting[_]] = Seq(
@@ -45,19 +46,19 @@ object ProjectPlugin extends AutoPlugin {
 
   lazy val clientRPCSettings: Seq[Def.Setting[_]] = logSettings ++ Seq(
     libraryDependencies ++= Seq(
-      "io.higherkindness" %% "mu-rpc-netty"        % V.muRPC,
-      "io.higherkindness" %% "mu-rpc-client-cache" % V.muRPC
+      "io.higherkindness" %% "mu-rpc-netty" % V.muRPC,
+      "io.higherkindness" %% "mu-rpc-fs2"   % V.muRPC
     )
   )
 
-  lazy val clientAppSettings: Seq[Def.Setting[_]] = logSettings ++ Seq(
+  lazy val clientAppSettings: Seq[Def.Setting[_]] = Seq(
     libraryDependencies ++= Seq(
       "com.github.scopt" %% "scopt" % V.scopt
     ))
 
-  lazy val serverSettings: Seq[Def.Setting[_]] = logSettings
+  lazy val serverProcessSettings: Seq[Def.Setting[_]] = logSettings
 
-  lazy val serverAppSettings: Seq[Def.Setting[_]] = logSettings ++ Seq(
+  lazy val serverAppSettings: Seq[Def.Setting[_]] = Seq(
     libraryDependencies ++= Seq("io.higherkindness" %% "mu-rpc-server" % V.muRPC))
 
   override def projectSettings: Seq[Def.Setting[_]] =
@@ -82,7 +83,6 @@ object ProjectPlugin extends AutoPlugin {
         "-Ywarn-unused-import"
       ),
       scalafmtCheck := true,
-      scalafmtOnCompile := true,
       addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full)
     )
 }

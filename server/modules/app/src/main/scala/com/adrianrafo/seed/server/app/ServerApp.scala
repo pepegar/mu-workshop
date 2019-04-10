@@ -9,11 +9,12 @@ import com.adrianrafo.seed.server.process.PeopleServiceHandler
 import com.adrianrafo.seed.server.protocol._
 import higherkindness.mu.rpc.server._
 import io.chrisdavenport.log4cats.Logger
+
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class ServerProgram[F[_]: ConcurrentEffect] extends ServerBoot[F] {
 
-  override def serverProgram(config: ServerConfig)(implicit L: Logger[F]): F[ExitCode] = {
+  def serverProgram(config: ServerConfig)(implicit L: Logger[F]): F[ExitCode] = {
 
     val serverName = s"${config.name}"
 
@@ -30,7 +31,5 @@ class ServerProgram[F[_]: ConcurrentEffect] extends ServerBoot[F] {
 }
 
 object ServerApp extends IOApp {
-  implicit val ce: ConcurrentEffect[IO] = IO.ioConcurrentEffect
-
   def run(args: List[String]): IO[ExitCode] = new ServerProgram[IO].runProgram(args)
 }

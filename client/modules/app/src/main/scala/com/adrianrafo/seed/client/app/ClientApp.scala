@@ -1,30 +1,15 @@
-package com.adrianrafo.seed.client
-package app
+package com.adrianrafo.seed.client.app
 
 import cats.effect._
 import com.adrianrafo.seed.client.common.models._
-import com.adrianrafo.seed.client.process.runtime.PeopleServiceClient
 import fs2.Stream
 import io.chrisdavenport.log4cats.Logger
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.duration._
-import scala.language.postfixOps
 
 class ClientProgram[F[_]: ConcurrentEffect] extends ClientBoot[F] {
 
-  def peopleServiceClient(host: String, port: Int)(
-      implicit L: Logger[F],
-      TM: Timer[F]): Stream[F, PeopleServiceClient[F]] =
-    PeopleServiceClient.createClient(
-      host,
-      port,
-      sslEnabled = false,
-      tryToRemoveUnusedEvery = 30 minutes,
-      removeUnusedAfter = 1 hour)
-
-  def clientProgram(
-      config: SeedClientConfig)(implicit L: Logger[F], TM: Timer[F]): Stream[F, ExitCode] = {
+  def clientProgram(config: SeedClientConfig)(implicit L: Logger[F]): Stream[F, ExitCode] = {
     for {
       peopleClient <- peopleServiceClient(config.client.host, config.client.port)
       result       <- Stream.eval(peopleClient.getPerson(config.params.request))
@@ -33,8 +18,6 @@ class ClientProgram[F[_]: ConcurrentEffect] extends ClientBoot[F] {
 }
 
 object ClientApp extends IOApp {
-  implicit val ce: ConcurrentEffect[IO] = IO.ioConcurrentEffect
-
   def run(args: List[String]): IO[ExitCode] =
     new ClientProgram[IO]
       .runProgram(args)

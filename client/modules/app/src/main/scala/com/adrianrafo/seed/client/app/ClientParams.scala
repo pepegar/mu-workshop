@@ -1,4 +1,5 @@
 package com.adrianrafo.seed.client.app
+
 import com.adrianrafo.seed.client.common.models.ParamsConfig
 import scopt.OptionParser
 
