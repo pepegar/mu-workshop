@@ -38,10 +38,11 @@ object PeopleServiceClient {
 
     }
 
-  def createClient[F[_]: Effect](hostname: String, port: Int, sslEnabled: Boolean = true)(
-      implicit L: Logger[F],
-      F: ConcurrentEffect[F],
-      EC: ExecutionContext): fs2.Stream[F, PeopleServiceClient[F]] = {
+  def createClient[F[_]: ContextShift: Logger](
+      hostname: String,
+      port: Int,
+      sslEnabled: Boolean = true)(
+      implicit F: ConcurrentEffect[F]): fs2.Stream[F, PeopleServiceClient[F]] = {
 
     val channel: F[ManagedChannel] =
       F.delay(InetAddress.getByName(hostname).getHostAddress).flatMap { ip =>

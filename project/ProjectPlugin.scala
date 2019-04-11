@@ -14,7 +14,7 @@ object ProjectPlugin extends AutoPlugin {
       val catsEffect     = "1.2.0"
       val log4cats       = "0.3.0"
       val logbackClassic = "1.2.3"
-      val muRPC          = "0.17.2"
+      val muRPC          = "0.18.0"
       val scopt          = "3.7.0"
       val pureconfig     = "0.10.2"
       val shapeless      = "2.3.3"

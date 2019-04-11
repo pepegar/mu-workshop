@@ -11,13 +11,10 @@ import io.chrisdavenport.log4cats.Logger
 import io.chrisdavenport.log4cats.slf4j.Slf4jLogger
 import pureconfig.generic.auto._
 
-import scala.concurrent.ExecutionContext
-
-abstract class ClientBoot[F[_]: ConcurrentEffect] {
+abstract class ClientBoot[F[_]: ConcurrentEffect: ContextShift] {
 
   def peopleServiceClient(host: String, port: Int)(
-      implicit L: Logger[F],
-      EC: ExecutionContext): Stream[F, PeopleServiceClient[F]] =
+      implicit L: Logger[F]): Stream[F, PeopleServiceClient[F]] =
     PeopleServiceClient.createClient(host, port, sslEnabled = false)
 
   def runProgram(args: List[String]): Stream[F, ExitCode] = {
