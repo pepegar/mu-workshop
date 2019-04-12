@@ -16,7 +16,7 @@ class PeopleServiceHandler[F[_]: Sync](implicit L: Logger[F]) extends PeopleServ
   val people: List[Person] = List(
     Person("Foo", 10),
     Person("Bar", 20),
-    Person("Bar", 10),
+    Person("Bar", 10)
   )
 
   def getPerson(request: PeopleRequest): F[PeopleResponse] = {
