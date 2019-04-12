@@ -81,7 +81,7 @@ addCommandAlias("runClient", "client_app/runMain com.adrianrafo.seed.client.app.
 lazy val allRootModules: Seq[ProjectReference] = Seq(
   shared,
   client,
-  server,
+  server
 )
 
 lazy val allRootModulesDeps: Seq[ClasspathDependency] =
