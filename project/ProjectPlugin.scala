@@ -44,6 +44,11 @@ object ProjectPlugin extends AutoPlugin {
     )
   )
 
+  lazy val serverProcessSettings: Seq[Def.Setting[_]] = logSettings
+
+  lazy val serverAppSettings: Seq[Def.Setting[_]] = Seq(
+    libraryDependencies ++= Seq("io.higherkindness" %% "mu-rpc-server" % V.muRPC))
+
   lazy val clientRPCSettings: Seq[Def.Setting[_]] = logSettings ++ Seq(
     libraryDependencies ++= Seq(
       "io.higherkindness" %% "mu-rpc-netty" % V.muRPC,
@@ -55,11 +60,6 @@ object ProjectPlugin extends AutoPlugin {
     libraryDependencies ++= Seq(
       "com.github.scopt" %% "scopt" % V.scopt
     ))
-
-  lazy val serverProcessSettings: Seq[Def.Setting[_]] = logSettings
-
-  lazy val serverAppSettings: Seq[Def.Setting[_]] = Seq(
-    libraryDependencies ++= Seq("io.higherkindness" %% "mu-rpc-server" % V.muRPC))
 
   override def projectSettings: Seq[Def.Setting[_]] =
     Seq(
