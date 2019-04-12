@@ -3,7 +3,6 @@ package common
 
 object models {
 
-  case class ServerConfig(name: String, host: String, port: Int)
+  case class SeedServerConfig(name: String, host: String, port: Int)
 
-  case class SeedServerConfig(server: ServerConfig)
 }
