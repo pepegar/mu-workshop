@@ -15,8 +15,6 @@ import higherkindness.mu.rpc.channel.{ManagedChannelInterpreter, UsePlaintext}
 import io.grpc.{CallOptions, ManagedChannel}
 import io.chrisdavenport.log4cats.Logger
 
-import scala.concurrent.ExecutionContext
-
 trait PeopleServiceClient[F[_]] {
 
   def getPerson(name: String): F[Either[PeopleError, Person]]
