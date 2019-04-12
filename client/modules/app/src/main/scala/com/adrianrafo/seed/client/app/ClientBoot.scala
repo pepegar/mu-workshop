@@ -4,7 +4,7 @@ package app
 import cats.effect._
 import cats.syntax.functor._
 import com.adrianrafo.seed.client.common.models._
-import com.adrianrafo.seed.client.process.runtime.PeopleServiceClient
+import com.adrianrafo.seed.client.process.PeopleServiceClient
 import com.adrianrafo.seed.config.ConfigService
 import fs2.Stream
 import io.chrisdavenport.log4cats.Logger

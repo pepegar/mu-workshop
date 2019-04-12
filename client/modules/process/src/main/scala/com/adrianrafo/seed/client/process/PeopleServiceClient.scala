@@ -1,6 +1,5 @@
 package com.adrianrafo.seed.client
 package process
-package runtime
 
 import java.net.InetAddress
 
@@ -12,8 +11,8 @@ import com.adrianrafo.seed.client.process.runtime.handlers._
 import com.adrianrafo.seed.server.protocol._
 import higherkindness.mu.rpc.ChannelForAddress
 import higherkindness.mu.rpc.channel.{ManagedChannelInterpreter, UsePlaintext}
-import io.grpc.{CallOptions, ManagedChannel}
 import io.chrisdavenport.log4cats.Logger
+import io.grpc.{CallOptions, ManagedChannel}
 
 trait PeopleServiceClient[F[_]] {
 
