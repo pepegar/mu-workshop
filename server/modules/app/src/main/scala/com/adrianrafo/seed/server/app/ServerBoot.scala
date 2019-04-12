@@ -15,9 +15,9 @@ abstract class ServerBoot[F[_]: ConcurrentEffect] {
   def runProgram(args: List[String]): F[ExitCode] =
     for {
       config   <- ConfigService[F].serviceConfig[SeedServerConfig]
-      logger   <- Slf4jLogger.fromName[F](config.server.name)
-      exitCode <- serverProgram(config.server)(logger)
+      logger   <- Slf4jLogger.fromName[F](config.name)
+      exitCode <- serverProgram(config)(logger)
     } yield exitCode
 
-  def serverProgram(config: ServerConfig)(implicit L: Logger[F]): F[ExitCode]
+  def serverProgram(config: SeedServerConfig)(implicit L: Logger[F]): F[ExitCode]
 }

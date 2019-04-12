@@ -10,11 +10,9 @@ import com.adrianrafo.seed.server.protocol._
 import higherkindness.mu.rpc.server._
 import io.chrisdavenport.log4cats.Logger
 
-import scala.concurrent.ExecutionContext.Implicits.global
-
 class ServerProgram[F[_]: ConcurrentEffect] extends ServerBoot[F] {
 
-  def serverProgram(config: ServerConfig)(implicit L: Logger[F]): F[ExitCode] = {
+  def serverProgram(config: SeedServerConfig)(implicit L: Logger[F]): F[ExitCode] = {
 
     val serverName = s"${config.name}"
 
