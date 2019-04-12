@@ -17,7 +17,6 @@ object ProjectPlugin extends AutoPlugin {
       val muRPC          = "0.18.0"
       val scopt          = "3.7.0"
       val pureconfig     = "0.10.2"
-      val shapeless      = "2.3.3"
     }
   }
 
