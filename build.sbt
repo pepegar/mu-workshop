@@ -88,3 +88,9 @@ lazy val allRootModulesDeps: Seq[ClasspathDependency] =
   allRootModules.map(ClasspathDependency(_, None))
 
 lazy val root = project in file(".") settings (name := "Avro-Seed") aggregate (allRootModules: _*) dependsOn (allRootModulesDeps: _*)
+
+//////////////////////////
+////      Slides      ////
+//////////////////////////
+
+lazy val slides = project in file("slides") dependsOn (allRootModulesDeps: _*) enablePlugins (MdocPlugin) settings docsSettings

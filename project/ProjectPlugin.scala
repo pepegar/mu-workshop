@@ -1,5 +1,6 @@
 import higherkindness.mu.rpc.idlgen.IdlGenPlugin.autoImport._
 import org.scalafmt.sbt.ScalafmtPlugin.autoImport._
+import mdoc.MdocPlugin.autoImport._
 import sbt.Keys._
 import sbt._
 
@@ -59,6 +60,12 @@ object ProjectPlugin extends AutoPlugin {
     libraryDependencies ++= Seq(
       "com.github.scopt" %% "scopt" % V.scopt
     ))
+
+  lazy val docsSettings: Seq[Def.Setting[_]] = Seq(
+    mdocVariables := Map(
+      "MU_VERSION" -> V.muRPC
+    )
+  )
 
   override def projectSettings: Seq[Def.Setting[_]] =
     Seq(
