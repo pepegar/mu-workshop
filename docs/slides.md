@@ -14,6 +14,10 @@ services.
 
 #
 
+## What's an IDL?
+
+#
+
 ## What is Avro?
 
 Avro is an Interface Definition Language widely used in the data
@@ -30,17 +34,29 @@ located in github and opensource, check it out https://github.com/higherkindness
 
 mu provides the ability to combine RPC protocols, services, and clients in your Scala program, thanks to gRPC. Although it’s fully integrated with gRPC, there are some important differences when defining the protocols, as we’ll see later on.
 
+## What does mu provide?
+
 #
+
+## Configure SBT
+
+- Show a graph with module dependencies
+- add settings for source generation
+- show specific dependencies for each module
 
 ## Defining the protocol
 
 ```scala
-libraryDependencies += "io.higherkindness" %% "mu-server" % "@MU_VERSION@"
+libraryDependencies += "io.higherkindness" %% "mu-rpc-channel" % "@MU_VERSION@"
 ```
 
-## Creating the server
+#
 
-## Creating the client
+## Creating the server from the protocol
+
+## Creating the client from the protocol
+
+## Connect to each other
 
 ## Other IDLs
 
