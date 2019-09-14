@@ -93,4 +93,4 @@ lazy val root = project in file(".") settings (name := "Avro-Seed") aggregate (a
 ////      Slides      ////
 //////////////////////////
 
-lazy val slides = project in file("slides") dependsOn (allRootModulesDeps: _*) enablePlugins (MdocPlugin) settings docsSettings
+lazy val slides = project in file("47deg-slides/slides") dependsOn (allRootModulesDeps: _*) enablePlugins (MdocPlugin) settings docsSettings

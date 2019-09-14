@@ -64,7 +64,8 @@ object ProjectPlugin extends AutoPlugin {
   lazy val docsSettings: Seq[Def.Setting[_]] = Seq(
     mdocVariables := Map(
       "MU_VERSION" -> V.muRPC
-    )
+      ),
+    mdocOut := file("47deg-slides/slides/")
   )
 
   override def projectSettings: Seq[Def.Setting[_]] =
