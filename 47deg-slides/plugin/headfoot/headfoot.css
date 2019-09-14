@@ -1,0 +1,40 @@
+/*****************************************************************
+ * @author: Juan Valencia Calvellido (calvellido),
+ * juanvalencia@calvellido.es
+ * https://github.com/calvellido
+ *
+ * headfoot for Reveal.js
+ *
+ * @license
+ * MIT licensed
+ ******************************************************************/
+
+.reveal header,
+.reveal footer {
+  position: absolute;
+  right: 16px;
+  left: 16px;
+  z-index: 2;
+  text-align: center;
+  font-size: 1rem;
+}
+
+.reveal header {
+  top: 16px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.reveal footer {
+  bottom: 24px;
+}
+
+.reveal.has-dark-background header,
+.reveal.has-dark-background footer {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.reveal.has-light-background header,
+.reveal.has-light-background footer {
+  color: rgba(0, 0, 0, 0.8);
+}

@@ -1,0 +1,103 @@
+/**
+ * 47deg (fortyseven) theme for reveal.js.
+ *
+ * By 47deg, 47deg.com
+ */
+
+
+// Default mixins and settings -----------------
+@import "../template/mixins";
+@import "../template/settings";
+// ---------------------------------------------
+
+
+// Include theme-specific fonts
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|Montserrat:400,600&display=swap);
+@import url(../../lib/font/source-sans-pro/source-sans-pro.css);
+
+
+// Override theme settings (see ../template/settings.scss)
+$backgroundColor: #f44336;
+
+$mainColor: #fff;
+$headingColor: #fff;
+
+$mainFontSize: 42px;
+$mainFont: 'Open Sans', Helvetica, sans-serif;
+$headingFont: 'Montserrat', Helvetica, sans-serif;
+$codeFont: 'Source Sans Pro', monospace;
+$headingTextShadow: none;
+$headingLetterSpacing: normal;
+$headingTextTransform: none;
+$headingFontWeight: 600;
+$linkColor: #1e2735;
+$linkColorHover: lighten( $linkColor, 15% );
+$selectionBackgroundColor: lighten( $linkColor, 25% );
+
+$heading1Size: 2.5em;
+$heading2Size: 1.6em;
+$heading3Size: 1.3em;
+$heading4Size: 1.0em;
+
+section.has-light-background {
+	&, h1, h2, h3, h4, h5, h6 {
+		color: #222;
+	}
+}
+
+@mixin bodyBackground() {
+	background-image: url("/img/47deg-background.png");
+	width: 100%;
+	height: 100%;
+	background-position: 50% 50%;
+	background-repeat: no-repeat;
+	background-size: cover;
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+}
+
+// Theme template ------------------------------
+@import "../template/theme";
+// ---------------------------------------------
+
+.reveal pre code {
+	padding: 15px;
+}
+
+.reveal section img {
+	background: none;
+	border: none;
+	box-shadow: none;
+}
+
+.reveal table {
+	max-height: 40vh;
+	overflow: auto;
+	display: inline-block;
+	max-width: 40vw;
+	font-size: 60%;
+}
+
+.reveal .slide-number {
+	right: 0;
+	bottom: 0;
+	font-size: 1rem;
+	padding: 12px 4px 4px 12px;
+	background: linear-gradient(to bottom right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 49%, rgba(0, 0, 0, 0.2) 51%, rgba(0, 0, 0, 0.4) 100%);
+	color: rgba(255, 255, 255, 0.8);
+	opacity: 0.8;
+}
+
+.reveal.has-dark-background .slide-number {
+	background: linear-gradient(to bottom right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 49%, rgba(0, 0, 0, 0.2) 51%, rgba(0, 0, 0, 0.4) 100%);
+	color: rgba(255, 255, 255, 0.8);
+}
+
+.reveal.has-light-background .slide-number {
+	background: linear-gradient(to bottom right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 49%, rgba(255, 255, 255, 0.2) 51%, rgba(255, 255, 255, 0.4) 100%);
+	color: rgba(0, 0, 0, 0.8);
+}
