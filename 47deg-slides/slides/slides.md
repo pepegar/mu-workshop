@@ -30,8 +30,8 @@ engineering world.
 
 ## What is mu?
 
-**mu** is an opensource library by your friendly folks @ 47Degrees.
-It's located in github and opensource, check it out
+**mu** is an open source library by your friendly folks @ 47Degrees.
+It's located in github and open source, check it out
 https://github.com/higherkindness/mu
 
 It is a scala library (in other languages soon) to do RPC in a purely
@@ -46,7 +46,7 @@ clients and servers.
 
 ## What does mu provide?
 
-mu allows you to:
+**mu** allows you to:
 
 - Create clients
 - Create servers
@@ -73,7 +73,7 @@ well.
 ## Defining the protocol
 
 ```scala
-libraryDependencies += "io.higherkindness" %% "mu-rpc-channel" % "0.18.0"
+libraryDependencies += "io.higherkindness" %% "mu-rpc-channel" % "0.18.4"
 ```
 
 
