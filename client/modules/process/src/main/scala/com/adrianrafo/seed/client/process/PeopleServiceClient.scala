@@ -39,7 +39,7 @@ object PeopleServiceClient {
       hostname: String,
       port: Int,
       sslEnabled: Boolean = true)(
-      implicit F: ConcurrentEffect[F]): fs2.Stream[F, PeopleServiceClient[F]] = {
+      implicit F: ConcurrentEffect[F]): Resource[F, PeopleServiceClient[F]] = {
 
     val channel: F[ManagedChannel] =
       F.delay(InetAddress.getByName(hostname).getHostAddress).flatMap { ip =>
@@ -51,7 +51,7 @@ object PeopleServiceClient {
     def clientFromChannel: Resource[F, PeopleService[F]] =
       PeopleService.clientFromChannel(channel, CallOptions.DEFAULT)
 
-    fs2.Stream.resource(clientFromChannel).map(PeopleServiceClient(_))
+    clientFromChannel.map(PeopleServiceClient(_))
   }
 
 }

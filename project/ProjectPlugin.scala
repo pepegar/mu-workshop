@@ -51,8 +51,8 @@ object ProjectPlugin extends AutoPlugin {
 
   lazy val clientRPCSettings: Seq[Def.Setting[_]] = logSettings ++ Seq(
     libraryDependencies ++= Seq(
-      "io.higherkindness" %% "mu-rpc-netty" % V.muRPC,
-      "io.higherkindness" %% "mu-rpc-fs2"   % V.muRPC
+      "io.higherkindness" %% "mu-rpc-netty"   % V.muRPC,
+      "io.higherkindness" %% "mu-rpc-channel" % V.muRPC
     )
   )
 
@@ -64,7 +64,7 @@ object ProjectPlugin extends AutoPlugin {
   lazy val docsSettings: Seq[Def.Setting[_]] = Seq(
     mdocVariables := Map(
       "MU_VERSION" -> V.muRPC
-      ),
+    ),
     mdocOut := file("47deg-slides/slides/")
   )
 
