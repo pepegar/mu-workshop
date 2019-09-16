@@ -14,5 +14,3 @@ class ClientProgram[F[_]: ConcurrentEffect: ContextShift] extends ClientBoot[F] 
   }
 
 }
-
-

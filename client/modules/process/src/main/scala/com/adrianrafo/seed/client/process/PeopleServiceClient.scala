@@ -30,7 +30,8 @@ object PeopleServiceClient {
         for {
           response <- client.getPerson(PeopleRequest(name))
           _ <- L.info(
-            s"$serviceName - Request: $name - Result: ${response.result.map(PeopleResponseLogger).unify}")
+            s"$serviceName - Request: $name - Result: ${response.result.map(PeopleResponseLogger).unify}"
+          )
         } yield response.result.map(PeopleResponseHandler).unify
 
     }
@@ -38,8 +39,8 @@ object PeopleServiceClient {
   def createClient[F[_]: ContextShift: Logger](
       hostname: String,
       port: Int,
-      sslEnabled: Boolean = true)(
-      implicit F: ConcurrentEffect[F]): Resource[F, PeopleServiceClient[F]] = {
+      sslEnabled: Boolean = true
+  )(implicit F: ConcurrentEffect[F]): Resource[F, PeopleServiceClient[F]] = {
 
     val channel: F[ManagedChannel] =
       F.delay(InetAddress.getByName(hostname).getHostAddress).flatMap { ip =>

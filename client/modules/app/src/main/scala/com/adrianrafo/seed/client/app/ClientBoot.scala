@@ -13,7 +13,8 @@ import pureconfig.generic.auto._
 abstract class ClientBoot[F[_]: ConcurrentEffect: ContextShift] {
 
   def peopleServiceClient(host: String, port: Int)(
-      implicit L: Logger[F]): Resource[F, PeopleServiceClient[F]] =
+      implicit L: Logger[F]
+  ): Resource[F, PeopleServiceClient[F]] =
     PeopleServiceClient.createClient(host, port, sslEnabled = false)
 
   def runProgram(args: List[String]): Resource[F, ExitCode] = {
