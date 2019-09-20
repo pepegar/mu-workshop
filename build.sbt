@@ -67,7 +67,7 @@ lazy val allRootModules: Seq[ProjectReference] = Seq(
 lazy val allRootModulesDeps: Seq[ClasspathDependency] =
   allRootModules.map(ClasspathDependency(_, None))
 
-lazy val root = project in file(".") settings (name := "Avro-Seed") aggregate (allRootModules: _*) dependsOn (allRootModulesDeps: _*)
+lazy val root = project in file(".") settings (name := "Mu-workshop") aggregate (allRootModules: _*) dependsOn (allRootModulesDeps: _*)
 
 //////////////////////////
 ////      Slides      ////
