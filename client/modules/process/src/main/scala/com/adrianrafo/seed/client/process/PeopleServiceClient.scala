@@ -38,14 +38,13 @@ object PeopleServiceClient {
 
   def createClient[F[_]: ContextShift: Logger](
       hostname: String,
-      port: Int,
-      sslEnabled: Boolean = true
+      port: Int
   )(implicit F: ConcurrentEffect[F]): Resource[F, PeopleServiceClient[F]] = {
 
     val channel: F[ManagedChannel] =
       F.delay(InetAddress.getByName(hostname).getHostAddress).flatMap { ip =>
         val channelFor    = ChannelForAddress(ip, port)
-        val channelConfig = if (!sslEnabled) List(UsePlaintext()) else Nil
+        val channelConfig = List(UsePlaintext()) //no SSL
         new ManagedChannelInterpreter[F](channelFor, channelConfig).build
       }
 

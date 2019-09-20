@@ -14,11 +14,12 @@ abstract class ClientBoot[F[_]: ConcurrentEffect: ContextShift] {
   def peopleServiceClient(host: String, port: Int)(
       implicit L: Logger[F]
   ): Resource[F, PeopleServiceClient[F]] =
-    PeopleServiceClient.createClient(host, port, sslEnabled = false)
+    PeopleServiceClient.createClient(host, port)
 
   def runProgram(args: List[String]): Resource[F, ExitCode] = {
     def setupConfig: F[SeedClientConfig] =
-      Effect[F].delay(pureconfig.loadConfigOrThrow[ClientConfig])
+      Effect[F]
+        .delay(pureconfig.loadConfigOrThrow[ClientConfig])
         .map(client => SeedClientConfig(client, ClientParams.loadParams(client.name, args)))
 
     for {
