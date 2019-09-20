@@ -1,6 +1,6 @@
 import higherkindness.mu.rpc.idlgen.IdlGenPlugin.autoImport._
-import org.scalafmt.sbt.ScalafmtPlugin.autoImport._
 import mdoc.MdocPlugin.autoImport._
+import org.scalafmt.sbt.ScalafmtPlugin.autoImport._
 import sbt.Keys._
 import sbt._
 
@@ -12,7 +12,6 @@ object ProjectPlugin extends AutoPlugin {
 
     //noinspection TypeAnnotation
     lazy val V = new {
-      val catsEffect     = "1.2.0"
       val log4cats       = "0.3.0"
       val logbackClassic = "1.2.3"
       val muRPC          = "0.18.4"
@@ -33,13 +32,6 @@ object ProjectPlugin extends AutoPlugin {
     )
   )
 
-  lazy val configSettings: Seq[Def.Setting[_]] = Seq(
-    libraryDependencies ++= Seq(
-      "org.typelevel"         %% "cats-effect" % V.catsEffect,
-      "com.github.pureconfig" %% "pureconfig"  % V.pureconfig
-    )
-  )
-
   lazy val serverProtocolSettings: Seq[Def.Setting[_]] = Seq(
     idlType := "avro",
     srcGenSerializationType := "AvroWithSchema",
@@ -52,19 +44,22 @@ object ProjectPlugin extends AutoPlugin {
   lazy val serverProcessSettings: Seq[Def.Setting[_]] = logSettings
 
   lazy val serverAppSettings: Seq[Def.Setting[_]] = Seq(
-    libraryDependencies ++= Seq("io.higherkindness" %% "mu-rpc-server" % V.muRPC)
+    libraryDependencies ++= Seq(
+      "io.higherkindness"     %% "mu-rpc-server" % V.muRPC,
+      "com.github.pureconfig" %% "pureconfig"    % V.pureconfig
+    )
   )
 
   lazy val clientRPCSettings: Seq[Def.Setting[_]] = logSettings ++ Seq(
     libraryDependencies ++= Seq(
-      "io.higherkindness" %% "mu-rpc-netty"   % V.muRPC,
-      "io.higherkindness" %% "mu-rpc-channel" % V.muRPC
+      "io.higherkindness" %% "mu-rpc-netty"   % V.muRPC
     )
   )
 
   lazy val clientAppSettings: Seq[Def.Setting[_]] = Seq(
     libraryDependencies ++= Seq(
-      "com.github.scopt" %% "scopt" % V.scopt
+      "com.github.scopt" %% "scopt" % V.scopt,
+      "com.github.pureconfig" %% "pureconfig" % V.pureconfig
     )
   )
 
@@ -99,7 +94,6 @@ object ProjectPlugin extends AutoPlugin {
         "-Xfuture",
         "-Ywarn-unused-import",
         "-P:silencer:pathFilters=target"
-      ),
-      scalafmtCheck := true
+      )
     )
 }

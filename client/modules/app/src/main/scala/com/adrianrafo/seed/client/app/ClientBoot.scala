@@ -5,7 +5,6 @@ import cats.effect._
 import cats.syntax.functor._
 import com.adrianrafo.seed.client.common.models._
 import com.adrianrafo.seed.client.process.PeopleServiceClient
-import com.adrianrafo.seed.config.ConfigService
 import io.chrisdavenport.log4cats.Logger
 import io.chrisdavenport.log4cats.slf4j.Slf4jLogger
 import pureconfig.generic.auto._
@@ -19,8 +18,7 @@ abstract class ClientBoot[F[_]: ConcurrentEffect: ContextShift] {
 
   def runProgram(args: List[String]): Resource[F, ExitCode] = {
     def setupConfig: F[SeedClientConfig] =
-      ConfigService[F]
-        .serviceConfig[ClientConfig]
+      Effect[F].delay(pureconfig.loadConfigOrThrow[ClientConfig])
         .map(client => SeedClientConfig(client, ClientParams.loadParams(client.name, args)))
 
     for {
