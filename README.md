@@ -23,7 +23,7 @@ both of them composed by smaller modules with specific purposes.
 //TODO explain modules
 
 In the `project/ProjectPlugin.scala` we can find the settings per each of our modules.
-The most important piece here is the **protocol settings** ,
+The most important piece here is the **protocol settings** specification,
 where we configure the `source generation` on compile time and specify the `IDL` we are going to use.
 
 //TODO explain settings
@@ -34,9 +34,11 @@ As we already told we are going to use `Avro` for our `IDL` protocol definition.
 
 First we are going to create our protocol models on a `People.avdl` file.
 
-Once we have the models we can use them into out protocol service `PeopleService.avdl`.
+Once we have the models, we can use them into out protocol service `PeopleService.avdl`.
 
-Note that the protocol belongs to the server file but it will be shared with the client for its generation.
+Note that the protocol belongs to the `server` side but it will be shared with the `client` modules for the `RPC` client generation.
+
+//TODO Here we should explain better what we mean by share with the client.
 
 If you use `sbt "groll next"` you can see how the **protocol** should looks like.
 
@@ -47,7 +49,7 @@ As we explained before, on this module we are going to implement the service gen
 
 Once we have implemented our service logic, it's time to create the `server` app itself.
 
-To do that we need to move to the `server-app` module where we are going to create 3 files:
+To do that, we need to move to the `server-app` module where we are going to create 3 files:
 
  - **ServerBoot**: To load dependencies and services required to start the `server`. Here we'll place the server **initialization**.
  - **ServerProgram**: With our server program. In this file we'll configure the `Mu` server.
@@ -62,14 +64,14 @@ we'll start with the `client-process` module as well (the `client-common` has th
 In this case, the `client-process` module will contain all the stuff related with our `Mu` client.
 
 We have there the `Mu` client configuration and creation, also, 
-we'll have the client usages on a `tagless final algebra/handler` (easily to mock for testing).
+we'll have the `client` usages on a `tagless final algebra/handler` (easily to mock for testing).
 
-***Note***: As a recommended pattern we usually create a internal model
- which we'll return instead of the protocol one in order to reduce the changes in case of protocol modifications.
+***Note***: As a recommended pattern we usually create an `internal` model
+ that will be the one we return instead of the `protocol` model in order to reduce the changes in case of protocol modifications.
 
 Now it's time to implement the `client` app.
 
-To do that we need to move to the `client-app` module where we are going to create 3 files:
+To do that, we need to move to the `client-app` module where we are going to create 3 files:
 
  - **ClientBoot**: To load dependencies and clients required to start the program.
  - **ClientProgram**: With our client logic. In this file we'll use the clients implemented on `client-process`.
