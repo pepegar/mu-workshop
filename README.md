@@ -8,7 +8,7 @@ Let's start moving the project to its initial state using:
  sbt "groll initial"
 ```
 
-and get sure everything works with:
+and make sure everything works with:
 
 ```bash
  sbt clean compile
@@ -17,12 +17,12 @@ and get sure everything works with:
 The initial state just contains the project structure with all the modules, 
 dependencies and settings we are going to need along the project.
 
-As you can see on the `build.sbt` the project is divided into `client` and `server`, 
+As you can see in the `build.sbt`, the project is divided into `client` and `server`, 
 both of them composed by smaller modules with specific purposes.
 
 //TODO explain modules
 
-On the `ProjectPlugin` we can find the settings per each of our modules.
+In the `project/ProjectPlugin.scala` we can find the settings per each of our modules.
 The most important piece here is the **protocol settings** ,
 where we configure the `source generation` on compile time and specify the `IDL` we are going to use.
 
@@ -58,7 +58,7 @@ If you use `sbt "groll next"` you can see how the **server** should looks like.
 ## Step 4 - Generating a client
 
 The client follows a similar structure, so, 
-we'll start as well on the `client-process` module (the `client-common` has the same purpose as `server-common`).
+we'll start with the `client-process` module as well (the `client-common` has the same purpose as `server-common`).
 In this case, the `client-process` module will contain all the stuff related with our `Mu` client.
 
 We have there the `Mu` client configuration and creation, also, 
@@ -67,9 +67,9 @@ we'll have the client usages on a `tagless final algebra/handler` (easily to moc
 ***Note***: As a recommended pattern we usually create a internal model
  which we'll return instead of the protocol one in order to reduce the changes in case of protocol modifications.
 
-Once we have implemented our service logic, it's time to create the `server` app itself.
+Now it's time to implement the `client` app.
 
-To do that we need to move to the `server-app` module where we are going to create 3 files:
+To do that we need to move to the `client-app` module where we are going to create 3 files:
 
  - **ClientBoot**: To load dependencies and clients required to start the program.
  - **ClientProgram**: With our client logic. In this file we'll use the clients implemented on `client-process`.
