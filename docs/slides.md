@@ -118,7 +118,9 @@ record PeopleResponse {
 
 ## AVDL documentation
 
-TODO: add link to docu (and QR)
+https://avro.apache.org/docs/current/idl.html
+
+![AVDL Documentation](./img/qr-avdl.png)
 
 
 ## The models protocol: TODO
