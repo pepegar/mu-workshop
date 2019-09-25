@@ -35,29 +35,99 @@ Avro is an **Interface Definition Language** widely used in the data
 engineering world.
 
 
-## What is mu?
+## What is Mu?
 
-**mu** is an opensource library by your friendly folks @ 47Degrees.
-It's located in github and opensource, check it out
-https://github.com/higherkindness/mu
+**Mu** is an RPC library by your friendly folks @ 47Degrees.
 
-It is a scala library (in other languages soon) to do RPC in a purely
+https://github.com/higherkindness/Mu
+
+![Mu home](./img/qr-mu.png)
+
+
+#  What is Mu for?
+
+It is a Scala library (in other languages soon) to do RPC in a purely
 functional fashion.
 
 
-## How does mu work?
+## How does Mu work?
 
-**mu** abstracts over **gRPC** framework to create purely functional
+**Mu** abstracts over **gRPC** framework to create purely functional
 clients and servers.
 
 
-## What does mu provide?
+## What does Mu provide?
 
-mu allows you to:
+Mu allows you to:
 
 - Create clients
 - Create servers
 - Generate Scala code given an IDL (Avro|OpenApi|Protobuf)
+
+---
+
+## Configuring SBT
+
+We will need some sbt configuration in order to make this codegen
+work.  Let's start checking out the correct tag:
+
+```sh
+sbt groll init
+```
+
+
+## Configuring SBT
+
+we start by adding the needed import to our **`build.sbt`** file.
+
+```scala
+import higherkindness.Mu.rpc.idlgen.IdlGenPlugin.autoImport._
+```
+
+
+## Configuring SBT
+
+We need to configure the `idlGen` plugin now.
+
+```scala
+idlType := avro
+srcGenSerializationType := Avro
+sourceGenerators in Compile += (srcGen in Compile).taskValue
+```
+
+(those are just the mandatory settings, but you can find a lot more
+here: https://higherkindness.io/Mu/generate-sources-from-idl)
+
+
+## Mu modules
+
+<!-- digraph G { -->
+<!--     subgraph cluster_1 { -->
+<!--       mu_rpc_netty -> mu_rpc_channel; -->
+<!--       mu_rpc_netty_ssl -> mu_rpc_netty; -->
+<!--       label = "client"; -->
+<!--     } -->
+
+<!--     subgraph cluster_0 { -->
+<!--       node [style=filled]; -->
+<!--       mu_rpc_channel -> mu_config; -->
+<!--       mu_rpc_channel -> mu_rpc_internal_core; -->
+<!--       mu_rpc_monix -> mu_rpc_channel; -->
+<!--       mu_rpc_fs2 -> mu_rpc_channel; -->
+<!--       label = "transport"; -->
+<!--       color = blue; -->
+<!--     } -->
+
+<!--     subgraph cluster_2 { -->
+<!--       mu_rpc_server -> mu_rpc_internal_core; -->
+<!--       mu_rpc_server -> mu_rpc_channel; -->
+<!--       mu_rpc_server -> mu_rpc_monix; -->
+<!--       mu_rpc_server -> mu_rpc_fs2; -->
+<!--       label = "server"; -->
+<!--     } -->
+<!-- } -->
+
+![modules graph](./img/modules-graph.png)
 
 ---
 
@@ -66,6 +136,7 @@ mu allows you to:
 The first thing we will need to do is to create the protocol.  Today
 we will use Avro as our IDL, but we can use Protobuf or Openapi as
 well.
+
 
 ## Avro protocol
 
@@ -83,7 +154,7 @@ First of all we will need to have the following dependencies in the
 `build.sbt` file.
 
 ```scala
-libraryDependencies += "io.higherkindness" %% "mu-rpc-channel" % "@MU_VERSION@"
+libraryDependencies += "io.higherkindness" %% "Mu-rpc-channel" % "@MU_VERSION@"
 ```
 
 
@@ -130,7 +201,7 @@ https://avro.apache.org/docs/current/idl.html
 ![AVDL Documentation](./img/qr-avdl.png)
 
 
-## The models protocol: TODO
+## The models protocol
 
 use `sbt groll next` to go to the first exercise, and put this
 protocol in the file
@@ -167,60 +238,40 @@ protocol People {
 
 ## the service protocol : TODO
 
+```java
+@namespace("com.adrianrafo.seed.server.protocol")
+protocol PeopleService {
+  import idl "People.avdl";
+
+  com.adrianrafo.seed.server.protocol.PeopleResponse getPerson(com.adrianrafo.seed.server.protocol.PeopleRequest request);
+
+}
+```
+
+---
 
 ## Creating the server from the protocol
 
-serverprocess (servicio tagless) & serverapp (mu service)
+serverprocess (servicio tagless) & serverapp (Mu service)
 
-TODO: recommended IDL -> scala,
-
-
-In order to generate scal  sources from IDLs, we will use `sbt-mu-idlgen`.
+In order to generate scala  sources from IDLs, we will use `sbt-Mu-idlgen`.
 
 ```scala
-addSbtPlugin("io.higherkindness" %% "sbt-mu-idlgen" % "@MU_VERSION@")
+addSbtPlugin("io.higherkindness" %% "sbt-Mu-idlgen" % "@MU_VERSION@")
 ```
 
 
-## Configuring SBT
+## Recommended way
 
-We will need some sbt configuration in order to make this codegen
-work.  Let's start checking out the correct tag:
-
-```
-sbt groll TODO
-```
-
-
-## Configuring SBT
-
-we start by adding the needed import to our `build.sbt` file.
-
-```scala
-import higherkindness.mu.rpc.idlgen.IdlGenPlugin.autoImport._
-```
-
-
-## Configuring SBT
-
-then, we need to tell `idlGen` the IDL language we're using and also
-telling it we will be generating sources when compiling (as scalaxb
-does, if you've used it...).
-
-```scala
-idlType := avro
-srcGenSerializationType := Avro
-srcGen on compile ..... TODO
-```
-
-(those are just the mandatory settings, but you can find a lot more
-here: https://higherkindness.io/mu/generate-sources-from-idl)
+in Mu, we advise users to go _IDL first_.  What we mean by that is to
+declare their IDLs by hand first and use them as their source of
+truth.
 
 
 ## Executing the generation
 
 Now that SBT is configured we can use `sbt idlGen` () task to make it
-generate our scala sources from the IDL.
+generate our Scala sources from the IDL.
 
 
 ## Creating the client from the protocol
