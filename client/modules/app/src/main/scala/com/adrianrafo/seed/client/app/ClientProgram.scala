@@ -9,8 +9,8 @@ class ClientProgram[F[_]: ConcurrentEffect: ContextShift] extends ClientBoot[F] 
   def clientProgram(config: SeedClientConfig)(implicit L: Logger[F]): Resource[F, ExitCode] = {
     for {
       peopleClient <- peopleServiceClient(config.client.host, config.client.port)
-      result       <- Resource.liftF(peopleClient.getPerson(config.params.request))
-    } yield result.fold(_ => ExitCode.Error, _ => ExitCode.Success)
+      result       <- Resource.liftF(peopleClient.getPerson(Some(config.params.request)))
+    } yield result.fold(ExitCode.Error)(_ => ExitCode.Success)
   }
 
 }
