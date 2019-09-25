@@ -85,7 +85,7 @@ libraryDependencies += "io.higherkindness" %% "mu-rpc-channel" % "@MU_VERSION@"
 For this workshop we will use Avro with the AVDL language.  All AVDL
 files should have one protocol definition.
 
-```avdl
+```java
 protocol ProtocolName {
   // all our declarations
 }
@@ -97,18 +97,19 @@ protocol ProtocolName {
 Avro records represent product types, like case classes, and we
 declare them with the `record` keyword:
 
-```avdl
+```java
 record Person {
   string name;
   int age;
 }
 ```
 
+
 ## Defining unions
 
 Unions in Avro represent sum types, like eithers:
 
-```avdl
+```java
 record PeopleResponse {
   union{ Person, NotFoundError, DuplicatedPersonError } result;
 }
@@ -126,7 +127,7 @@ use `sbt groll next` to go to the first exercise, and put this
 protocol in the file
 `server/modules/protocol/src/main/resources/People.avdl`.
 
-```avdl
+```java
 @namespace("com.adrianrafo.seed.server.protocol")
 protocol People {
 
