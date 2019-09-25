@@ -252,7 +252,7 @@ protocol PeopleService {
 
 ## Creating the server from the protocol
 
-serverprocess (servicio tagless) & serverapp (Mu service)
+TODO: serverprocess (servicio tagless) & serverapp (Mu service)
 
 In order to generate scala  sources from IDLs, we will use `sbt-Mu-idlgen`.
 
@@ -273,10 +273,11 @@ truth.
 Now that SBT is configured we can use `sbt idlGen` () task to make it
 generate our Scala sources from the IDL.
 
+---
 
 ## Creating the client from the protocol
 
-clientprocess (tagless) & clientapp
+TODO: clientprocess (tagless) & clientapp
 
 ## Connect to each other
 
