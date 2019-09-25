@@ -1,4 +1,4 @@
-# mu workshop
+# Mu workshop
 
 ## compiling the slides
 
