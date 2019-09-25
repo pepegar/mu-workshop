@@ -1,9 +1,16 @@
-# mu-workshop
+# Mu workshop
+
+<section data-background="rgba(255,255,255,0.40)">
+  <!-- TODO: Esto queda más feo que el copón... hay que buscar otro color :) -->
+  <!-- TODO: Ok, con el fondo clarito va mejor... pero hay que verlo -->
+  <img src="https://higherkindness.io/img/mu-masthead-image.svg"/>
+</section>
 
 ---
 
 ## Who are we?
 
+<!-- TODO: Buscar las caricaturas, 47deg-mkt está chapao ahora... -->
 @adrianrafo Senior Software Engineer @ 47Degrees
 @pepegar Tech Lead @ 47Degrees
 
