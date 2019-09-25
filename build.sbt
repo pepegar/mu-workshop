@@ -35,7 +35,7 @@ addCommandAlias("runServer", "server_app/runMain com.adrianrafo.seed.server.app.
 
 lazy val client_common = project in file("client/modules/common")
 
-lazy val client_process = project in file("client/modules/process") settings clientRPCSettings dependsOn (client_common, server_protocol)
+lazy val client_process = project in file("client/modules/process") settings clientProcessSettings dependsOn (client_common, server_protocol)
 
 lazy val client_app = project in file("client/modules/app") settings clientAppSettings dependsOn (client_process)
 

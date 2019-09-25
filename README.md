@@ -20,13 +20,35 @@ dependencies and settings we are going to need along the project.
 As you can see in the `build.sbt`, the project is divided into `client` and `server`, 
 both of them composed by smaller modules with specific purposes.
 
-//TODO explain modules
+The modules list contains:
+ - **ClientCommon**: A place for shared models across the client.
+ - **ClientProcess**: The module for the client logic. Whatever the client will do should be placed here. It also contains the code to create the Mu client.
+ - **ClientApp**: The client initialization. Here we just initiate the application and its dependencies (logger, clients, config, ....).
+ - **ServerCommon**: A place for shared models across the server.
+ - **ServerProcess**: The module for the server logic. Whatever the server will do should be placed here.
+ - **ServerApp**: The server initialization. Here we just initiate the application and its dependencies (logger, clients, config, ....).
 
 In the `project/ProjectPlugin.scala` we can find the settings per each of our modules.
 The most important piece here is the **protocol settings** specification,
 where we configure the `source generation` on compile time and specify the `IDL` we are going to use.
 
-//TODO explain settings
+The complete list of settings is:
+ - **logSettings**: Settings required for logging.
+ - **serverProtocolSettings**: Settings for source generation on compile time from the Avro protocol.
+ - **serverProcessSettings**: The server process module settings. It just need the logging to work.
+ - **serverAppSettings**: The settings for the server app with the **Mu** server dependency.
+ - **clientProcessSettings**: The client process module settings. The **Mu** client dependency is needed here.
+ - **clientAppSettings**: Here we just add the dependencies required to start the client application.
+ - **docsSettings**: Settings for slides. Unrelated with the project itself.
+
+The `projectSettings` contains some different pieces. 
+
+From one side, the `macro paradise` required by **Mu** to work and some 
+`scala options` to enable some compiler features and warnings about dirty/problematic code.
+
+From the other side, we have the `silencer` plugin.
+The `silencer` plugin allow us to suppress the warnings about `unused imports` that the **Mu** generated code can throw.
+The `"-P:silencer:pathFilters=target"` is the `scalaOption` in charge of this.
 
 ## Step 2 - Defining protocol
 
@@ -38,7 +60,11 @@ Once we have the models, we can use them into out protocol service `PeopleServic
 
 Note that the protocol belongs to the `server` side but it will be shared with the `client` modules for the `RPC` client generation.
 
-//TODO Here we should explain better what we mean by share with the client.
+We need to share the `protocol` between the `server` and the `client` because the generated code by **Mu** 
+will contains all the utilities for both the `RPC client` and the `RPC server` creation.
+
+This behaviour of share the protocol from the `server` with the `client` using the `IDL` files,
+is to avoid **binary issues** caused for different versions between the `server` and the `client`.
 
 If you use `sbt "groll next"` you can see how the **protocol** should looks like.
 
@@ -52,7 +78,7 @@ Once we have implemented our service logic, it's time to create the `server` app
 To do that, we need to move to the `server-app` module where we are going to create 3 files:
 
  - **ServerBoot**: To load dependencies and services required to start the `server`. Here we'll place the server **initialization**.
- - **ServerProgram**: With our server program. In this file we'll configure the `Mu` server.
+ - **ServerProgram**: With our server program. In this file we'll configure the **Mu** server.
  - **ServerApp**: Just with the `IOApp` and the `main` method with only one line running the `ServerProgram`.
 
 If you use `sbt "groll next"` you can see how the **server** should looks like.
@@ -61,9 +87,9 @@ If you use `sbt "groll next"` you can see how the **server** should looks like.
 
 The client follows a similar structure, so, 
 we'll start with the `client-process` module as well (the `client-common` has the same purpose as `server-common`).
-In this case, the `client-process` module will contain all the stuff related with our `Mu` client.
+In this case, the `client-process` module will contain all the stuff related with our **Mu** client.
 
-We have there the `Mu` client configuration and creation, also, 
+We have there the **Mu** client configuration and creation, also, 
 we'll have the `client` usages on a `tagless final algebra/handler` (easily to mock for testing).
 
 ***Note***: As a recommended pattern we usually create an `internal` model

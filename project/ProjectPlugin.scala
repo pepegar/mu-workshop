@@ -49,7 +49,7 @@ object ProjectPlugin extends AutoPlugin {
     )
   )
 
-  lazy val clientRPCSettings: Seq[Def.Setting[_]] = logSettings ++ Seq(
+  lazy val clientProcessSettings: Seq[Def.Setting[_]] = logSettings ++ Seq(
     libraryDependencies ++= Seq(
       "io.higherkindness" %% "mu-rpc-netty" % V.muRPC
     )
