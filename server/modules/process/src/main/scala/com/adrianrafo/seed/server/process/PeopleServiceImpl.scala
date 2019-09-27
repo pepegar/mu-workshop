@@ -6,7 +6,7 @@ import cats.implicits._
 import com.adrianrafo.seed.server.protocol._
 import io.chrisdavenport.log4cats.Logger
 
-class PeopleServiceHandler(implicit L: Logger[IO]) extends PeopleService[IO] {
+class PeopleServiceImpl(implicit L: Logger[IO]) extends PeopleService[IO] {
 
   val serviceName = "PeopleService"
 

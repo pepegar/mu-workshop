@@ -5,7 +5,7 @@ import java.net.InetAddress
 
 import cats.effect._
 import com.adrianrafo.seed.client.common.models.Person
-import com.adrianrafo.seed.client.process.runtime.PeopleServiceClientHandler
+import com.adrianrafo.seed.client.process.runtime.PeopleServiceClientImpl
 import com.adrianrafo.seed.server.protocol._
 import higherkindness.mu.rpc.ChannelForAddress
 import higherkindness.mu.rpc.channel._
@@ -36,7 +36,7 @@ object PeopleServiceClient {
     def clientFromChannel: Resource[IO, PeopleService[IO]] =
       PeopleService.clientFromChannel(channel, CallOptions.DEFAULT)
 
-    clientFromChannel.map(PeopleServiceClientHandler(_))
+    clientFromChannel.map(PeopleServiceClientImpl(_))
   }
 
 }
