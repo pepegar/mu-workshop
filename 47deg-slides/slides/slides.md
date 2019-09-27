@@ -12,20 +12,21 @@
 
 <!-- TODO: Buscar las caricaturas, 47deg-mkt está chapao ahora... -->
 
-@adrianrafo Senior Software Engineer @ 47Degrees
-@pepegar Tech Lead @ 47Degrees
+**@adrianrafo** Senior Software Engineer @ 47Degrees
+
+**@pepegar** Tech Lead @ 47Degrees
 
 ---
 
 ## Brief introduction to RPC
 
-RPC, stands for remote procedure call, and it's a way of communicating
+RPC, stands for **R**emote **P**rocedure **C**all, and it's a way of communicating
 services.
 
 
 ## What's an IDL?
 
-IDL stands for **Interface Definition Language**.  IDLs are used to
+IDL stands for **I**nterface **D**efinition **L**anguage.  IDLs are used to
 declare communication protocols, and they commonly allow users to
 declare complex types and messages.
 
@@ -42,12 +43,12 @@ engineering world.
 
 https://github.com/higherkindness/Mu
 
-![Mu home](./img/qr-mu.png)
+<!-- ![](TODO: arreglar URL)-->
 
 
 # What is Mu for?
 
-It is a Scala library (in other languages soon) to do RPC in a purely
+It is a Scala library (in other languages soon) to do **RPC** in a purely
 functional fashion.
 
 
@@ -59,11 +60,11 @@ clients and servers.
 
 ## What does Mu provide?
 
-Mu allows you to:
+**Mu** allows you to:
 
 - Create clients
 - Create servers
-- Generate Scala code given an IDL (Avro|OpenApi|Protobuf)
+- Generate Scala code given an **IDL** (Avro|OpenApi|Protobuf)
 
 ---
 
@@ -73,13 +74,21 @@ We will need some sbt configuration in order to make this codegen
 work.  Let's start checking out the correct tag:
 
 ```sh
-sbt groll init
+sbt "groll initial"
+```
+
+And making sure everything works with
+
+```sh
+sbt clean compile
 ```
 
 
 ## Configuring SBT
 
-we start by adding the needed import to our **`build.sbt`** file.
+we start by adding the needed import to our **SBT** config file.
+
+TODO: dependencia en el plugin.sbt
 
 ```scala
 import higherkindness.Mu.rpc.idlgen.IdlGenPlugin.autoImport._
@@ -96,37 +105,31 @@ srcGenSerializationType := Avro
 sourceGenerators in Compile += (srcGen in Compile).taskValue
 ```
 
+TODO: hacer QR aqui
+
 (those are just the mandatory settings, but you can find a lot more
 here: https://higherkindness.io/Mu/generate-sources-from-idl)
 
 
 ## Mu modules
 
-<!-- digraph G { --><!--     subgraph cluster_1 { --><!--       mu_rpc_netty -> mu_rpc_channel; --><!--       mu_rpc_netty_ssl -> mu_rpc_netty; --><!--       label = "client"; --><!--     } -->
-
-<!--     subgraph cluster_0 { --><!--       node [style=filled]; --><!--       mu_rpc_channel -> mu_config; --><!--       mu_rpc_channel -> mu_rpc_internal_core; --><!--       mu_rpc_monix -> mu_rpc_channel; --><!--       mu_rpc_fs2 -> mu_rpc_channel; --><!--       label = "transport"; --><!--       color = blue; --><!--     } -->
-
-<!--     subgraph cluster_2 { --><!--       mu_rpc_server -> mu_rpc_internal_core; --><!--       mu_rpc_server -> mu_rpc_channel; --><!--       mu_rpc_server -> mu_rpc_monix; --><!--       mu_rpc_server -> mu_rpc_fs2; --><!--       label = "server"; --><!--     } --><!-- } -->
 
 ![modules graph](./img/modules-graph.png)
 
 ---
 
+## Recommended way
+
+In **Mu**, we advise users to go _**IDL** first_.  This means to
+declare the **IDLs** by hand first and use them as the source of
+truth.
+
+
 ## Creating the protocol
 
 The first thing we will need to do is to create the protocol.  Today
-we will use Avro as our IDL, but we can use Protobuf or Openapi as
-well.
-
-
-## Avro protocol
-
-
-## Configure SBT
-
-- Show a graph with module dependencies
-- add settings for source generation
-- show specific dependencies for each module
+we will use **Avro** as our **IDL**, but we can use **Protobuf** or
+**Openapi** as well.
 
 
 ## Defining the protocol
@@ -135,7 +138,7 @@ First of all we will need to have the following dependencies in the
 `build.sbt` file.
 
 ```scala
-libraryDependencies += "io.higherkindness" %% "Mu-rpc-channel" % "0.18.0"
+libraryDependencies += "io.higherkindness" %% "mu-rpc-channel" % "0.18.0"
 ```
 
 
@@ -153,7 +156,7 @@ protocol ProtocolName {
 
 ## Defining records
 
-Avro records represent product types, like case classes, and we
+Avro records represent product types, **like case classes**, and we
 declare them with the `record` keyword:
 
 ```java
@@ -166,7 +169,7 @@ record Person {
 
 ## Defining unions
 
-Unions in Avro represent sum types, like eithers:
+Unions in Avro represent sum types, **like Either**:
 
 ```java
 record PeopleResponse {
@@ -184,9 +187,7 @@ https://avro.apache.org/docs/current/idl.html
 
 ## The models protocol
 
-use `sbt groll next` to go to the first exercise, and put this
-protocol in the file
-`server/modules/protocol/src/main/resources/People.avdl`.
+Let's define the model of our protocol.
 
 ```java
 @namespace("com.adrianrafo.seed.server.protocol")
@@ -217,7 +218,11 @@ protocol People {
 ```
 
 
-## the service protocol : TODO
+## the service protocol
+
+And let's define the service protocol now.
+
+TODO: describe the instructions
 
 ```java
 @namespace("com.adrianrafo.seed.server.protocol")
@@ -229,24 +234,14 @@ protocol PeopleService {
 }
 ```
 
----
 
-## Creating the server from the protocol
+## Dependencies
 
-TODO: serverprocess (servicio tagless) & serverapp (Mu service)
-
-In order to generate scala  sources from IDLs, we will use `sbt-Mu-idlgen`.
+In order to generate scala  sources from IDLs, we will use `sbt-mu-idlgen`.
 
 ```scala
-addSbtPlugin("io.higherkindness" %% "sbt-Mu-idlgen" % "0.18.0")
+addSbtPlugin("io.higherkindness" %% "sbt-mu-idlgen" % "0.18.0")
 ```
-
-
-## Recommended way
-
-in Mu, we advise users to go _IDL first_.  What we mean by that is to
-declare their IDLs by hand first and use them as their source of
-truth.
 
 
 ## Executing the generation
@@ -254,17 +249,85 @@ truth.
 Now that SBT is configured we can use `sbt idlGen` () task to make it
 generate our Scala sources from the IDL.
 
+
+---
+
+## Reviewing the generated code
+
+TODO: go through all the generated code and comment it
+
+
+## Creating the server from the protocol
+
+there will be four main parts to the server module.
+
+- **ServerProcess**
+- **ServerBoot**
+- **ServerProgram**
+- **ServerApp**
+
+
+## ServerProcess
+
+TODO: Add some code sample here?
+
+In this class we will implement the service generated by
+**`sbt-idlgen`**
+
+
+## ServerBoot
+
+To load dependencies and services required to start the server. Here
+we'll place the server initialization.
+
+
+## ServerProgram
+
+We use this file to configure the **Mu** server.
+
+
+## ServerApp
+
+Just with the IOApp and the main method with only one line running the
+ServerProgram.
+
 ---
 
 ## Creating the client from the protocol
 
-TODO: clientprocess (tagless) & clientapp
+- **ClientProcess**
+- **ClientBoot**
+- **ClientProgram**
+- **ClientApp**
+
+
+## ClientProcess
+
+TODO: add proper description
+
+
+## ClientBoot
+
+To load dependencies and clients required to start the program.
+
+
+## ClientProgram
+
+With our client logic. In this file we'll use the clients implemented on client-process.
+
+
+## ClientApp
+
+Just with the IOApp and the main method with only one line running the ClientProgram.
+
+---
 
 ## Connect to each other
 
+Point your client to `http://172.168.1.222:8000` and send messages!
 
-## Other IDLs
+---
 
+## Thanks!
 
-## Protobuf
-
+TODO: add bibliografia
