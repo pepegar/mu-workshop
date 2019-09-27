@@ -8,12 +8,12 @@ import com.adrianrafo.seed.client.process.PeopleServiceClient.serviceName
 import com.adrianrafo.seed.server.protocol._
 import io.chrisdavenport.log4cats.Logger
 
-class PeopleServiceClientHandler[F[_]: Effect](client: PeopleService[F])(implicit L: Logger[F])
-    extends PeopleServiceClient[F] {
+class PeopleServiceClientHandler[IO[_]: Effect](client: PeopleService[IO])(implicit L: Logger[IO])
+    extends PeopleServiceClient[IO] {
 
   def personFromRPC(rpcPerson: PersonRPC): Person = Person(rpcPerson.name, rpcPerson.age)
 
-  def getPerson(name: Option[String]): F[Option[Person]] =
+  def getPerson(name: Option[String]): IO[Option[Person]] =
     for {
       response <- client.getPerson(PeopleRequestRPC(name))
       _ <- response.result.fold(
@@ -25,7 +25,7 @@ class PeopleServiceClientHandler[F[_]: Effect](client: PeopleService[F])(implici
 }
 
 object PeopleServiceClientHandler {
-  def apply[F[_]: Effect](client: PeopleService[F])(
-      implicit L: Logger[F]
-  ): PeopleServiceClientHandler[F] = new PeopleServiceClientHandler(client)
+  def apply[IO[_]: Effect](client: PeopleService[IO])(
+      implicit L: Logger[IO]
+  ): PeopleServiceClientHandler[IO] = new PeopleServiceClientHandler(client)
 }

@@ -4,7 +4,6 @@ package process
 import java.net.InetAddress
 
 import cats.effect._
-import cats.implicits._
 import com.adrianrafo.seed.client.common.models.Person
 import com.adrianrafo.seed.client.process.runtime.PeopleServiceClientHandler
 import com.adrianrafo.seed.server.protocol._
@@ -22,19 +21,19 @@ object PeopleServiceClient {
 
   val serviceName = "PeopleClient"
 
-  def createClient[F[_]: ContextShift: Logger](
+  def createClient(
       hostname: String,
       port: Int
-  )(implicit F: ConcurrentEffect[F]): Resource[F, PeopleServiceClient[F]] = {
+  )(implicit CE: ConcurrentEffect[IO], CS: ContextShift[IO], L: Logger[IO]): Resource[IO, PeopleServiceClient[IO]] = {
 
-    val channel: F[ManagedChannel] =
-      F.delay(InetAddress.getByName(hostname).getHostAddress).flatMap { ip =>
+    val channel: IO[ManagedChannel] =
+      IO(InetAddress.getByName(hostname).getHostAddress).flatMap { ip =>
         val channelFor    = ChannelForAddress(ip, port)
         val channelConfig = List(UsePlaintext()) //no SSL
-        new ManagedChannelInterpreter[F](channelFor, channelConfig).build
+        new ManagedChannelInterpreter[IO](channelFor, channelConfig).build
       }
 
-    def clientFromChannel: Resource[F, PeopleService[F]] =
+    def clientFromChannel: Resource[IO, PeopleService[IO]] =
       PeopleService.clientFromChannel(channel, CallOptions.DEFAULT)
 
     clientFromChannel.map(PeopleServiceClientHandler(_))

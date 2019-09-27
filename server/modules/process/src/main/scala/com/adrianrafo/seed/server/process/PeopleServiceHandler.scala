@@ -1,12 +1,12 @@
 package com.adrianrafo.seed.server
 package process
 
-import cats.effect.Sync
+import cats.effect.IO
 import cats.implicits._
 import com.adrianrafo.seed.server.protocol._
 import io.chrisdavenport.log4cats.Logger
 
-class PeopleServiceHandler[F[_]: Sync](implicit L: Logger[F]) extends PeopleService[F] {
+class PeopleServiceHandler(implicit L: Logger[IO]) extends PeopleService[IO] {
 
   val serviceName = "PeopleService"
 
@@ -16,7 +16,7 @@ class PeopleServiceHandler[F[_]: Sync](implicit L: Logger[F]) extends PeopleServ
     PersonRPC("Bar", 10)
   )
 
-  def getPerson(request: PeopleRequestRPC): F[PeopleResponseRPC] = {
+  def getPerson(request: PeopleRequestRPC): IO[PeopleResponseRPC] = {
     def findPerson(nameRequest: String): Either[PeopleErrorRPC, PersonRPC] =
       people.count(_.name == nameRequest) match {
         case x if x < 2 =>
@@ -29,7 +29,7 @@ class PeopleServiceHandler[F[_]: Sync](implicit L: Logger[F]) extends PeopleServ
           PeopleErrorRPC(s"Person ${request.name} duplicated").asLeft[PersonRPC]
       }
 
-    request.name.fold(PeopleResponseRPC(PersonRPC("", 0).asRight[PeopleErrorRPC]).pure[F]) { name =>
+    request.name.fold(PeopleResponseRPC(PersonRPC("", 0).asRight[PeopleErrorRPC]).pure[IO]) { name =>
       val response = PeopleResponseRPC(findPerson(name))
       L.info(s"$serviceName - Request: $request - Response: $response").as(response)
     }
