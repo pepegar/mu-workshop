@@ -64,14 +64,14 @@ We need to share the `protocol` between the `server` and the `client` because th
 will contains all the utilities for both the `RPC client` and the `RPC server` creation.
 
 We share the protocol from the `server` with the `client` using the `IDL` files,
-is to avoid **binary issues** caused for different versions between the `server` and the `client`.
+to avoid **binary issues** caused for different versions between the `server` and the `client`.
 
-If you use `sbt "groll next"` you can see how the **protocol** should looks like.
+If you use `sbt "groll next"` you can see how the **protocol** should look like.
 
 ## Step 3 - Creating a server
 
 We are going to start on the `server-process` module (realize that `server-common` just contains some common utils and models).
-As we explained before, on this module we are going to implement the service generated from the protocol.
+As we explained before, we are going to implement the service generated from the protocol on this module .
 
 Once we have implemented our service logic, it's time to create the `server` app itself.
 
@@ -103,7 +103,7 @@ To do that, we need to move to the `client-app` module where we are going to cre
  - **ClientProgram**: With our client logic. In this file we'll use the clients implemented on `client-process`.
  - **ClientApp**: Just with the `IOApp` and the `main` method with only one line running the `ClientProgram`.
 
-If you use `sbt "groll next"` you can see how the **client** should looks like.
+If you use `sbt "groll next"` you can see how the **client** should look like.
 
 ## Final - Live demo
 
