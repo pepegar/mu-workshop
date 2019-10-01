@@ -1,14 +1,13 @@
 package com.adrianrafo.seed.client.process.runtime
 
-import cats.effect.Effect
-import cats.implicits._
+import cats.effect.IO
 import com.adrianrafo.seed.client.common.models.Person
 import com.adrianrafo.seed.client.process.PeopleServiceClient
 import com.adrianrafo.seed.client.process.PeopleServiceClient.serviceName
 import com.adrianrafo.seed.server.protocol._
 import io.chrisdavenport.log4cats.Logger
 
-class PeopleServiceClientImpl[IO[_]: Effect](client: PeopleService[IO])(implicit L: Logger[IO])
+class PeopleServiceClientImpl(client: PeopleService[IO])(implicit L: Logger[IO])
     extends PeopleServiceClient[IO] {
 
   def personFromRPC(rpcPerson: PersonRPC): Person = Person(rpcPerson.name, rpcPerson.age)
@@ -25,7 +24,6 @@ class PeopleServiceClientImpl[IO[_]: Effect](client: PeopleService[IO])(implicit
 }
 
 object PeopleServiceClientImpl {
-  def apply[IO[_]: Effect](client: PeopleService[IO])(
-      implicit L: Logger[IO]
-  ): PeopleServiceClientImpl[IO] = new PeopleServiceClientImpl(client)
+  def apply(client: PeopleService[IO])(implicit L: Logger[IO]): PeopleServiceClientImpl =
+    new PeopleServiceClientImpl(client)
 }

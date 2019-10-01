@@ -17,8 +17,7 @@ abstract class ClientBoot(implicit CE: ConcurrentEffect[IO], CS: ContextShift[IO
 
   def runProgram(args: List[String]): Resource[IO, ExitCode] = {
     def setupConfig: IO[SeedClientConfig] =
-      Effect[IO]
-        .delay(pureconfig.loadConfigOrThrow[ClientConfig])
+      IO(pureconfig.loadConfigOrThrow[ClientConfig])
         .map(client => SeedClientConfig(client, ClientParams.loadParams(client.name, args)))
 
     for {

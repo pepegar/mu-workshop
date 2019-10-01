@@ -11,7 +11,7 @@ abstract class ServerBoot {
 
   def runProgram(args: List[String]): IO[ExitCode] =
     for {
-      config   <- Effect[IO].delay(pureconfig.loadConfigOrThrow[SeedServerConfig])
+      config   <- IO(pureconfig.loadConfigOrThrow[SeedServerConfig])
       logger   <- Slf4jLogger.fromName[IO](config.name)
       exitCode <- serverProgram(config)(logger)
     } yield exitCode
