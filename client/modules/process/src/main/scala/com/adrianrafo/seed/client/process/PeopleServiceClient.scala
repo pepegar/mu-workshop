@@ -4,54 +4,39 @@ package process
 import java.net.InetAddress
 
 import cats.effect._
-import cats.syntax.flatMap._
-import cats.syntax.functor._
-import com.adrianrafo.seed.client.common.models.PeopleError
-import com.adrianrafo.seed.client.process.runtime.handlers._
+import com.adrianrafo.seed.client.common.models.Person
+import com.adrianrafo.seed.client.process.runtime.PeopleServiceClientImpl
 import com.adrianrafo.seed.server.protocol._
 import higherkindness.mu.rpc.ChannelForAddress
-import higherkindness.mu.rpc.channel.{ManagedChannelInterpreter, UsePlaintext}
+import higherkindness.mu.rpc.channel._
 import io.chrisdavenport.log4cats.Logger
 import io.grpc.{CallOptions, ManagedChannel}
 
 trait PeopleServiceClient[F[_]] {
 
-  def getPerson(name: String): F[Either[PeopleError, Person]]
+  def getPerson(name: Option[String]): F[Option[Person]]
 
 }
 object PeopleServiceClient {
 
   val serviceName = "PeopleClient"
 
-  def apply[F[_]: Effect](client: PeopleService[F])(implicit L: Logger[F]): PeopleServiceClient[F] =
-    new PeopleServiceClient[F] {
-
-      def getPerson(name: String): F[Either[PeopleError, Person]] =
-        for {
-          response <- client.getPerson(PeopleRequest(name))
-          _ <- L.info(
-            s"$serviceName - Request: $name - Result: ${response.result.map(PeopleResponseLogger).unify}"
-          )
-        } yield response.result.map(PeopleResponseHandler).unify
-
-    }
-
-  def createClient[F[_]: ContextShift: Logger](
+  def createClient(
       hostname: String,
       port: Int
-  )(implicit F: ConcurrentEffect[F]): Resource[F, PeopleServiceClient[F]] = {
+  )(implicit CE: ConcurrentEffect[IO], CS: ContextShift[IO], L: Logger[IO]): Resource[IO, PeopleServiceClient[IO]] = {
 
-    val channel: F[ManagedChannel] =
-      F.delay(InetAddress.getByName(hostname).getHostAddress).flatMap { ip =>
+    val channel: IO[ManagedChannel] =
+      IO(InetAddress.getByName(hostname).getHostAddress).flatMap { ip =>
         val channelFor    = ChannelForAddress(ip, port)
         val channelConfig = List(UsePlaintext()) //no SSL
-        new ManagedChannelInterpreter[F](channelFor, channelConfig).build
+        new ManagedChannelInterpreter[IO](channelFor, channelConfig).build
       }
 
-    def clientFromChannel: Resource[F, PeopleService[F]] =
+    def clientFromChannel: Resource[IO, PeopleService[IO]] =
       PeopleService.clientFromChannel(channel, CallOptions.DEFAULT)
 
-    clientFromChannel.map(PeopleServiceClient(_))
+    clientFromChannel.map(PeopleServiceClientImpl(_))
   }
 
 }
