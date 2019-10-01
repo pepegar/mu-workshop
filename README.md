@@ -41,14 +41,11 @@ The complete list of settings is:
  - **clientAppSettings**: Here we just add the dependencies required to start the client application.
  - **docsSettings**: Settings for slides. Unrelated with the project itself.
 
-The `projectSettings` contains some different pieces. 
+The `projectSettings` contains a mix of things:
 
-From one side, the `macro paradise` required by **Mu** to work and some 
-`scala options` to enable some compiler features and warnings about dirty/problematic code.
-
-From the other side, we have the `silencer` plugin.
-The `silencer` plugin allow us to suppress the warnings about `unused imports` that the **Mu** generated code can throw.
-The `"-P:silencer:pathFilters=target"` is the `scalaOption` in charge of this.
+- The `macro-paradise` compiler plugin to activate macros,
+- Some `scalacOptions` to make the compiler more strict
+- Adds the `silencer` plugin, to make the compiler not warn about unused imports on generated code. The `"-P:silencer:pathFilters=target"` in `scalacOptions` is in charge of this.
 
 ## Step 2 - Defining protocol
 
@@ -63,7 +60,7 @@ Note that the protocol belongs to the `server` side but it will be shared with t
 We need to share the `protocol` between the `server` and the `client` because the generated code by **Mu** 
 will contains all the utilities for both the `RPC client` and the `RPC server` creation.
 
-We share the protocol from the `server` with the `client` using the `IDL` files,
+We share the protocol from the `server` with the `client` using the `IDL` files
 to avoid **binary issues** caused for different versions between the `server` and the `client`.
 
 If you use `sbt "groll next"` you can see how the **protocol** should look like.
@@ -71,7 +68,7 @@ If you use `sbt "groll next"` you can see how the **protocol** should look like.
 ## Step 3 - Creating a server
 
 We are going to start on the `server-process` module (realize that `server-common` just contains some common utils and models).
-As we explained before, we are going to implement the service generated from the protocol on this module .
+As we explained before, we are going to implement the service generated from the protocol in this module .
 
 Once we have implemented our service logic, it's time to create the `server` app itself.
 
