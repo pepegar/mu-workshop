@@ -63,7 +63,7 @@ Note that the protocol belongs to the `server` side but it will be shared with t
 We need to share the `protocol` between the `server` and the `client` because the generated code by **Mu** 
 will contains all the utilities for both the `RPC client` and the `RPC server` creation.
 
-This behaviour of share the protocol from the `server` with the `client` using the `IDL` files,
+We share the protocol from the `server` with the `client` using the `IDL` files,
 is to avoid **binary issues** caused for different versions between the `server` and the `client`.
 
 If you use `sbt "groll next"` you can see how the **protocol** should looks like.
