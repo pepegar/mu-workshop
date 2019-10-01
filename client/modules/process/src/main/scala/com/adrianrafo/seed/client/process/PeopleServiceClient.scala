@@ -30,28 +30,28 @@ object PeopleServiceClient {
         for {
           response <- client.getPerson(PeopleRequest(name))
           _ <- L.info(
-            s"$serviceName - Request: $name - Result: ${response.result.map(PeopleResponseLogger).unify}")
+            s"$serviceName - Request: $name - Result: ${response.result.map(PeopleResponseLogger).unify}"
+          )
         } yield response.result.map(PeopleResponseHandler).unify
 
     }
 
   def createClient[F[_]: ContextShift: Logger](
       hostname: String,
-      port: Int,
-      sslEnabled: Boolean = true)(
-      implicit F: ConcurrentEffect[F]): fs2.Stream[F, PeopleServiceClient[F]] = {
+      port: Int
+  )(implicit F: ConcurrentEffect[F]): Resource[F, PeopleServiceClient[F]] = {
 
     val channel: F[ManagedChannel] =
       F.delay(InetAddress.getByName(hostname).getHostAddress).flatMap { ip =>
         val channelFor    = ChannelForAddress(ip, port)
-        val channelConfig = if (!sslEnabled) List(UsePlaintext()) else Nil
+        val channelConfig = List(UsePlaintext()) //no SSL
         new ManagedChannelInterpreter[F](channelFor, channelConfig).build
       }
 
     def clientFromChannel: Resource[F, PeopleService[F]] =
       PeopleService.clientFromChannel(channel, CallOptions.DEFAULT)
 
-    fs2.Stream.resource(clientFromChannel).map(PeopleServiceClient(_))
+    clientFromChannel.map(PeopleServiceClient(_))
   }
 
 }
