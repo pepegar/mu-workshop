@@ -40,12 +40,10 @@ engineering world.
 
 **Mu** is an RPC library by your friendly folks @ 47Degrees.
 
-https://github.com/higherkindness/Mu
-
-<!-- ![](TODO: arreglar URL)-->
+![Mu documentation](./img/qr-mu.png)
 
 
-#  What is Mu for?
+##  What is Mu for?
 
 It is a Scala library (in other languages soon) to do **RPC** in a purely
 functional fashion.
@@ -105,10 +103,7 @@ srcGenSerializationType := Avro
 sourceGenerators in Compile += (srcGen in Compile).taskValue
 ```
 
-TODO: hacer QR aqui
-
-(those are just the mandatory settings, but you can find a lot more
-here: https://higherkindness.io/Mu/generate-sources-from-idl)
+![](./img/qr-mu-idlgen-docs.png)
 
 
 ## Mu modules
