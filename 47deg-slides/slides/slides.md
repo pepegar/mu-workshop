@@ -41,12 +41,10 @@ engineering world.
 
 **Mu** is an RPC library by your friendly folks @ 47Degrees.
 
-https://github.com/higherkindness/Mu
-
-<!-- ![](TODO: arreglar URL)-->
+![Mu documentation](./img/qr-mu.png)
 
 
-# What is Mu for?
+## What is Mu for?
 
 It is a Scala library (in other languages soon) to do **RPC** in a purely
 functional fashion.
@@ -105,14 +103,12 @@ srcGenSerializationType := Avro
 sourceGenerators in Compile += (srcGen in Compile).taskValue
 ```
 
-TODO: hacer QR aqui
-
-(those are just the mandatory settings, but you can find a lot more
-here: https://higherkindness.io/Mu/generate-sources-from-idl)
+![](./img/qr-mu-idlgen-docs.png)
 
 
 ## Mu modules
 
+<!-- digraph G { --><!--     subgraph cluster_0 { --><!--         mu_common -> mu_rpc_internal_core; --><!--         label = "common"; --><!--     } --><!--     subgraph cluster_1 { --><!--         mu_rpc_channel; --><!--         mu_rpc_channel -> mu_common; --><!--         label = "transport"; --><!--     } --><!--     subgraph cluster_2 { --><!--         mu_rpc_netty -> mu_rpc_channel; --><!--         mu_rpc_okhttp -> mu_rpc_channel; --><!--         label = "client"; --><!--     } --><!--     subgraph cluster_3 { --><!--         mu_rpc_server -> { mu_common mu_rpc_channel }; --><!--         label = "server"; --><!--     } --><!--     subgraph cluster_4 { --><!--         mu_rpc_prometheus -> mu_rpc_internal_core; --><!--         mu_rpc_dropwizard -> mu_rpc_internal_core; --><!--         label = "other integrations"; --><!--     } --><!-- } -->
 
 ![modules graph](./img/modules-graph.png)
 
