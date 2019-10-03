@@ -108,6 +108,31 @@ sourceGenerators in Compile += (srcGen in Compile).taskValue
 
 ## Mu modules
 
+<!-- digraph G { -->
+<!--     subgraph cluster_0 { -->
+<!--         mu_common -> mu_rpc_internal_core; -->
+<!--         label = "common"; -->
+<!--     } -->
+<!--     subgraph cluster_1 { -->
+<!--         mu_rpc_channel; -->
+<!--         mu_rpc_channel -> mu_common; -->
+<!--         label = "transport"; -->
+<!--     } -->
+<!--     subgraph cluster_2 { -->
+<!--         mu_rpc_netty -> mu_rpc_channel; -->
+<!--         mu_rpc_okhttp -> mu_rpc_channel; -->
+<!--         label = "client"; -->
+<!--     } -->
+<!--     subgraph cluster_3 { -->
+<!--         mu_rpc_server -> { mu_common mu_rpc_channel }; -->
+<!--         label = "server"; -->
+<!--     } -->
+<!--     subgraph cluster_4 { -->
+<!--         mu_rpc_prometheus -> mu_rpc_internal_core; -->
+<!--         mu_rpc_dropwizard -> mu_rpc_internal_core; -->
+<!--         label = "other integrations"; -->
+<!--     } -->
+<!-- } -->
 
 ![modules graph](./img/modules-graph.png)
 
