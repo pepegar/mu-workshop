@@ -348,13 +348,12 @@ Just with the **IOApp** and the main method with only one line running the
 
 ## Connect to each other
 
-Point your client to `http://telecaster.local:19683` and send messages!
+Point your client to `http://pepe-mbp.local:19683` and send messages!
 
 ---
 
 ## Thanks!
 
-TODO: add bibliografia
-Mu
-Avro
-GRPC
+- [https://higherkindness.io/mu](https://higherkindness.io/mu)
+- [https://avro.apache.org](https://avro.apache.org)
+- [https://grpc.io/](https://grpc.io/)
