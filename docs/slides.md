@@ -1,9 +1,7 @@
 # Mu workshop
 
 <section data-background="rgba(255,255,255,0.40)">
-  <!-- TODO: Esto queda más feo que el copón... hay que buscar otro color :) -->
-  <!-- TODO: Ok, con el fondo clarito va mejor... pero hay que verlo -->
-  <img src="https://higherkindness.io/img/mu-masthead-image.svg"/>
+  <img src="./img/mu-logo.png" style="height: 650px; margin-top: 50px;"/>
 </section>
 
 ---
@@ -179,7 +177,7 @@ libraryDependencies += "io.higherkindness" %% "mu-rpc-channel" % "@MU_VERSION@"
 
 ## The protocol
 
-For this workshop, we will use **Avro** with the **AVDL** language. 
+For this workshop, we will use **Avro** with the **AVDL** language.
 All **AVDL** files should have one protocol definition.
 
 ```java

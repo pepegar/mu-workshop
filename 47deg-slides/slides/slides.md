@@ -1,16 +1,14 @@
 # Mu workshop
 
 <section data-background="rgba(255,255,255,0.40)">
-<!-- TODO: Esto queda más feo que el copón... hay que buscar otro color :) -->
-<!-- TODO: Ok, con el fondo clarito va mejor... pero hay que verlo -->
-<img src="https://higherkindness.io/img/mu-masthead-image.svg"/>
+<img src="./img/mu-logo.png" style="height: 650px; margin-top: 50px;"/>
 </section>
 
 ---
 
 ## Who are we?
 
-<!-- TODO: Buscar las caricaturas, 47deg-mkt está chapao ahora... -->
+<!-- TODO: Buscar las caricaturas, 47deg-mkt está chapao ahora... No me pones caricaturas ni muerto-->
 
 **@adrianrafo** Senior Software Engineer @ 47Degrees
 
@@ -26,14 +24,14 @@ services.
 
 ## What's an IDL?
 
-IDL stands for **I**nterface **D**efinition **L**anguage.  IDLs are used to
+IDL stands for **I**nterface **D**efinition **L**anguage. IDLs are used to
 declare communication protocols, and they commonly allow users to
 declare complex types and messages.
 
 
 ## What is Avro?
 
-Avro is an **Interface Definition Language** widely used in the data
+**Avro** is an **Interface Definition Language** widely used in the data
 engineering world.
 
 
@@ -68,14 +66,14 @@ clients and servers.
 
 ## Configuring SBT
 
-We will need some sbt configuration in order to make this codegen
-work.  Let's start checking out the correct tag:
+We will need some **SBT** configuration in order to make this code generation
+work. Let's start checking out the correct tag:
 
 ```sh
 sbt "groll initial"
 ```
 
-And making sure everything works with
+And making sure everything works with:
 
 ```sh
 sbt clean compile
@@ -84,9 +82,17 @@ sbt clean compile
 
 ## Configuring SBT
 
-we start by adding the needed import to our **SBT** config file.
+In order to generate Scala sources from IDLs, we will use the `sbt-mu-idlgen` plugin.
 
-TODO: dependencia en el plugin.sbt
+Let's add this to the **project/plugins.sbt** file.
+
+```scala
+addSbtPlugin("io.higherkindness" %% "sbt-mu-idlgen" % "0.18.4")
+```
+
+## Imports
+
+We are going to start by adding the needed import to the config file, in our case **ProjectPlugin.scala**.
 
 ```scala
 import higherkindness.Mu.rpc.idlgen.IdlGenPlugin.autoImport._
@@ -95,15 +101,23 @@ import higherkindness.Mu.rpc.idlgen.IdlGenPlugin.autoImport._
 
 ## Configuring SBT
 
-We need to configure the `idlGen` plugin now.
+Now we will configure the `mu-idlGen` plugin:
 
 ```scala
-idlType := avro
-srcGenSerializationType := Avro
+idlType := "avro"
+srcGenSerializationType := "AvroWithSchema"
 sourceGenerators in Compile += (srcGen in Compile).taskValue
 ```
 
 ![](./img/qr-mu-idlgen-docs.png)
+
+
+## SerializationType differences
+
+There is two different **Avro** serialization types:
+
+- **Avro** -> Regular **Avro** serialization, faster but not supporting protocol evolutions.
+- **AvroWithSchema** -> Slower, but easier to evolve protocols.
 
 
 ## Mu modules
@@ -116,32 +130,32 @@ sourceGenerators in Compile += (srcGen in Compile).taskValue
 
 ## Recommended way
 
-In **Mu**, we advise users to go _**IDL** first_.  This means to
+In **Mu**, we advise users to go _**IDL** first_. This means to
 declare the **IDLs** by hand first and use them as the source of
 truth.
 
 
 ## Creating the protocol
 
-The first thing we will need to do is to create the protocol.  Today
+The first thing we will need to do is to create the protocol. Today
 we will use **Avro** as our **IDL**, but we can use **Protobuf** or
 **Openapi** as well.
 
 
 ## Defining the protocol
 
-First of all we will need to have the following dependencies in the
+First of all, we will need to have the following dependencies in the
 `build.sbt` file.
 
 ```scala
-libraryDependencies += "io.higherkindness" %% "mu-rpc-channel" % "0.18.0"
+libraryDependencies += "io.higherkindness" %% "mu-rpc-channel" % "0.18.4"
 ```
 
 
-## the protocol
+## The protocol
 
-For this workshop we will use Avro with the AVDL language.  All AVDL
-files should have one protocol definition.
+For this workshop, we will use **Avro** with the **AVDL** language.
+All **AVDL** files should have one protocol definition.
 
 ```java
 protocol ProtocolName {
@@ -152,8 +166,8 @@ protocol ProtocolName {
 
 ## Defining records
 
-Avro records represent product types, **like case classes**, and we
-declare them with the `record` keyword:
+**Avro records** represent product types, **like case classes**, and we
+declare them with the **record** keyword:
 
 ```java
 record Person {
@@ -165,27 +179,27 @@ record Person {
 
 ## Defining unions
 
-Unions in Avro represent sum types, **like Either**:
+Unions in **Avro** are used to represent different cases, like **Enums**:
 
 ```java
 record PeopleResponse {
-  union{ Person, NotFoundError, DuplicatedPersonError } result;
+  union { Person, NotFoundError, DuplicatedPersonError } result;
 }
 ```
 
 
 ## Defining RPC messages
 
-We use java-like syntax for defining **RPC messages**.
+We use java-like syntax for defining **RPC messages**:
 
 ```java
-int sum(int a, int b = 0);
+int sum(int a, int b);
 ```
 
 
 ## AVDL documentation
 
-https://avro.apache.org/docs/current/idl.html
+You can find more information about **Avro** syntax here: https://avro.apache.org/docs/current/idl.html
 
 ![AVDL Documentation](./img/qr-avdl.png)
 
@@ -193,63 +207,48 @@ https://avro.apache.org/docs/current/idl.html
 
 ## Today's exercise
 
-in today's exercise we will create a simple distributed application
-that will allow us to get information from **Persons** in our system.
-Think of it as a person directory.
+In today's exercise, we will create a simple distributed application
+that will allow us to get information from people in our system.
+Think on it as a person directory.
 
 
-## The models
-
-<!-- Todo: too much info! -->
+## The models protocol
 
 Create:
 
-- a record for a **Person**, with name and age.
-- a record for an error with persons.  It will need a message.
-- a record for a **PersonRequest**.  We will need to ask for a
-  particular person by name, or just get the first one.
-- a record for a **PersonResponse** that will contain either a
-  **Person** or a **PersonError**.
+- **Person**, with name and age.
+- **PersonError** for error with persons. It will need a message.
+- **PersonRequest**.We can ask for a particular person using a name or just get the first person in the server.
+- **PersonResponse** that will contain either a **Person** or a **PersonError**.
 
 
-## the service protocol
+## The service protocol
 
 Now that we have the models, we need to define the communication.
 
-create a new protocol named **PeopleService** that imports
+Create a new protocol named **PeopleService** that imports
 **People.avdl** and declares a message **getPerson** that:
 
-- receives a **PeopleRequest** as request.
-- returns a **PeopleResponse**.
-
-
-## Dependencies
-
-In order to generate scala  sources from IDLs, we will use `sbt-mu-idlgen`.
-
-```scala
-addSbtPlugin("io.higherkindness" %% "sbt-mu-idlgen" % "0.18.0")
-```
+- Receives a **PeopleRequest**.
+- Returns a **PeopleResponse**.
 
 
 ## Executing the generation
 
-Now that SBT is configured we can use `sbt idlGen` () task to make it
+Now that **SBT** is configured we can use `sbt compile` task to make it
 generate our Scala sources from the IDL.
 
-
----
 
 ## Reviewing the generated code
 
 - In the **People.scala** we'll have all the models.
-- protocol **PeopleService.scala** we'll have a tagless final algebra
+- In the **PeopleService.scala** we'll have a tagless final algebra
   defining our interface.
 
 
 ## Creating the server from the protocol
 
-there will be four main parts to the server module.
+There will be four main parts to the server module.
 
 - **ServerProcess**
 - **ServerBoot**
@@ -259,12 +258,12 @@ there will be four main parts to the server module.
 
 ## ServerProcess
 
-In this class we will implement the service generated by
-**`sbt-idlgen`**
+In this class we will implement the service generated by the
+**sbt-idlgen** plugin:
 
-```scala:mdoc
-class PeopleServiceServer extends PeopleService[IO] {
-  // our implementation will come here
+```scala
+class PeopleServiceImpl extends PeopleService[IO] {
+  // our implementation will come here.  We can use, for example, a list containing the state of the server.
 }
 ```
 
@@ -319,17 +318,20 @@ on client-process.
 
 ## ClientApp
 
-Just with the IOApp and the main method with only one line running the
-ClientProgram.
+Just with the **IOApp** and the main method with only one line running the
+**ClientProgram**.
 
 ---
 
 ## Connect to each other
 
-Point your client to `http://172.168.1.222:8000` and send messages!
+Point your client to `http://telecaster.local:19683` and send messages!
 
 ---
 
 ## Thanks!
 
 TODO: add bibliografia
+Mu
+Avro
+GRPC
