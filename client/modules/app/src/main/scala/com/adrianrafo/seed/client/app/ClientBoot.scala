@@ -13,7 +13,8 @@ abstract class ClientBoot(implicit CE: ConcurrentEffect[IO], CS: ContextShift[IO
 
   def peopleServiceClient(host: String, port: Int)(
       implicit L: Logger[IO]
-  ): Resource[IO, PeopleServiceClient[IO]] = ???
+  ): Resource[IO, PeopleServiceClient[IO]] =
+    PeopleServiceClient.createClient(host, port)
 
   def runProgram(args: List[String]): Resource[IO, ExitCode] = {
     def setupConfig: IO[SeedClientConfig] =
