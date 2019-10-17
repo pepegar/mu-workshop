@@ -3,9 +3,9 @@ package common
 
 object models {
 
-  case class ClientConfig(name: String, host: String, port: Int)
+  case class ClientConfig(name: String, port: Int)
 
-  case class ParamsConfig(request: String)
+  case class ParamsConfig(host:String, request: Option[String])
 
   case class SeedClientConfig(client: ClientConfig, params: ParamsConfig)
 

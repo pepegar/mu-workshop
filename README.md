@@ -109,6 +109,29 @@ Let's try all this hell.
 The `speakers` are going to run the **server** and 
 the `atendees` (on the same local network) will use their **clients** to send requests to the **speaker's server**.
 
+To run the **server** we just use: 
+
+```bash 
+sbt runServer
+```
+
+To run the **client** we use `sbt runClient`. This command has two optional params:
+
+ - **host**: The server address. Default: `localhost`.
+ - **name**: The person name we'll use on the request to the server. Default: `None`.
+ 
+Depending of the **name** param we'll receive different responses:
+
+ - Without specifying the param we'll receive an empty `Person`.
+ - Setting it as `Foo` we'll get a successful response with the `Person` data.
+ - With `Bar` we should receive the `duplicated person error` message. 
+ - Using another name we'll get the `not found error` message.
+ 
+Let's try with the `Foo` name, remember to specify the server **host** if needed:
+
+```bash
+sbt "runClient --host=adrian-xps.local --name=Foo"
+```
 
 ## Compiling the slides
 

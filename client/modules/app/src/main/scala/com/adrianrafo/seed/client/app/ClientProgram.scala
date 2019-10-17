@@ -8,8 +8,8 @@ class ClientProgram(implicit CE: ConcurrentEffect[IO], CS: ContextShift[IO]) ext
 
   def clientProgram(config: SeedClientConfig)(implicit L: Logger[IO]): Resource[IO, ExitCode] = {
     for {
-      peopleClient <- peopleServiceClient(config.client.host, config.client.port)
-      result       <- Resource.liftF(peopleClient.getPerson(Some(config.params.request)))
+      peopleClient <- peopleServiceClient(config.params.host, config.client.port)
+      result       <- Resource.liftF(peopleClient.getPerson(config.params.request))
     } yield result.fold(ExitCode.Error)(_ => ExitCode.Success)
   }
 

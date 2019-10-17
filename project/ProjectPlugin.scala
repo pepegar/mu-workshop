@@ -11,13 +11,13 @@ object ProjectPlugin extends AutoPlugin {
 
     //noinspection TypeAnnotation
     lazy val V = new {
-      val log4cats       = "0.3.0"
+      val log4cats       = "1.0.1"
       val logbackClassic = "1.2.3"
-      val muRPC          = "0.18.4"
+      val muRPC          = "0.18.5-SNAPSHOT"
       val scopt          = "3.7.0"
       val silencer       = "1.4.3"
       val macroParadise  = "2.1.0"
-      val pureconfig     = "0.10.2"
+      val pureconfig     = "0.12.1"
     }
   }
 
@@ -26,7 +26,6 @@ object ProjectPlugin extends AutoPlugin {
   private lazy val logSettings: Seq[Def.Setting[_]] = Seq(
     libraryDependencies ++= Seq(
       "ch.qos.logback"    % "logback-classic" % V.logbackClassic,
-      "io.chrisdavenport" %% "log4cats-core"  % V.log4cats,
       "io.chrisdavenport" %% "log4cats-slf4j" % V.log4cats
     )
   )

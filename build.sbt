@@ -55,9 +55,9 @@ lazy val allClientModulesDeps: Seq[ClasspathDependency] =
 lazy val client = project in file("client") aggregate (allClientModules: _*) dependsOn (allClientModulesDeps: _*)
 addCommandAlias("runClient", "client_app/runMain com.adrianrafo.seed.client.app.ClientApp")
 
-/////////////////////////
+//////////////////////////
 ////       Root       ////
-/////////////////////////
+//////////////////////////
 
 lazy val allRootModules: Seq[ProjectReference] = Seq(
   client,
