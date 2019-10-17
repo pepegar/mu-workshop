@@ -8,11 +8,9 @@
 
 ## Who are we?
 
-<!-- TODO: Buscar las caricaturas, 47deg-mkt está chapao ahora... No me pones caricaturas ni muerto-->
+**@adrianrafo** Senior Software Engineer @47Degrees
 
-**@adrianrafo** Senior Software Engineer @ 47Degrees
-
-**@pepegar** Tech Lead @ 47Degrees
+**@pepegar** Tech Lead @47Degrees
 
 ---
 
@@ -86,7 +84,7 @@ In order to generate Scala sources from IDLs, we will use the `sbt-mu-idlgen` pl
 Let's add this to the **project/plugins.sbt** file.
 
 ```scala
-addSbtPlugin("io.higherkindness" %% "sbt-mu-idlgen" % "0.18.4")
+addSbtPlugin("io.higherkindness" %% "sbt-mu-idlgen" % "0.19.0")
 ```
 
 
@@ -148,7 +146,7 @@ First of all, we will need to have the following dependencies in the
 `build.sbt` file.
 
 ```scala
-libraryDependencies += "io.higherkindness" %% "mu-rpc-channel" % "0.18.4"
+libraryDependencies += "io.higherkindness" %% "mu-rpc-channel" % "0.19.0"
 ```
 
 
@@ -315,7 +313,7 @@ trait PeopleServiceClient {
 }
 ```
 
-On the companion object of our algebra, 
+On the companion object of our algebra,
 we find the utility to create the **Mu** client from an **host** and a **port**.
 
 

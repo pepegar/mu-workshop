@@ -8,9 +8,9 @@
 
 ## Who are we?
 
-**@adrianrafo** Senior Software Engineer @ 47Degrees
+**@adrianrafo** Senior Software Engineer @47Degrees
 
-**@pepegar** Tech Lead @ 47Degrees
+**@pepegar** Tech Lead @47Degrees
 
 ---
 
