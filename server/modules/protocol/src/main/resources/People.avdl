@@ -1,21 +1,4 @@
 @namespace("com.adrianrafo.seed.server.protocol")
 protocol People {
 
-  record PersonRPC {
-    string name;
-    int age;
-  }
-
-  record PeopleErrorRPC {
-    string message;
-  }
-
-  record PeopleRequestRPC {
-    union { null, string } name;
-  }
-
-  record PeopleResponseRPC {
-    union { PeopleErrorRPC, PersonRPC } result;
-  }
-
 }

@@ -10,16 +10,9 @@ import io.chrisdavenport.log4cats.Logger
 class PeopleServiceClientImpl(client: PeopleService[IO])(implicit L: Logger[IO])
     extends PeopleServiceClient[IO] {
 
-  def personFromRPC(rpcPerson: PersonRPC): Person = Person(rpcPerson.name, rpcPerson.age)
+  private def personFromRPC(rpcPerson: PersonRPC): Person = Person(rpcPerson.name, rpcPerson.age)
 
-  def getPerson(name: Option[String]): IO[Option[Person]] =
-    for {
-      response <- client.getPerson(PeopleRequestRPC(name))
-      _ <- response.result.fold(
-        err => L.error(s"$serviceName - Request: $name - Error: $err"),
-        res => L.info(s"$serviceName - Request: $name - Result: $res")
-      )
-    } yield response.result.toOption.map(personFromRPC)
+  def getPerson(name: Option[String]): IO[Option[Person]] = ???
 
 }
 

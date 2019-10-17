@@ -28,9 +28,7 @@ object PeopleServiceClient {
 
     val channel: IO[ManagedChannel] =
       IO(InetAddress.getByName(hostname).getHostAddress).flatMap { ip =>
-        val channelFor    = ChannelForAddress(ip, port)
-        val channelConfig = List(UsePlaintext()) //no SSL
-        new ManagedChannelInterpreter[IO](channelFor, channelConfig).build
+        ???
       }
 
     def clientFromChannel: Resource[IO, PeopleService[IO]] =
