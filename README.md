@@ -3,7 +3,7 @@
 ## Step 1 - Project structure
 
 Let's start moving the project to its initial state using:
- 
+
 ```bash
  sbt "groll initial"
 ```
@@ -14,10 +14,10 @@ and make sure everything works with:
  sbt clean compile
 ```
 
-The initial state just contains the project structure with all the modules, 
+The initial state just contains the project structure with all the modules,
 dependencies and settings we are going to need along the project.
 
-As you can see in the `build.sbt`, the project is divided into `client` and `server`, 
+As you can see in the `build.sbt`, the project is divided into `client` and `server`,
 both of them composed by smaller modules with specific purposes.
 
 The modules list contains:
@@ -57,7 +57,7 @@ Once we have the models, we can use them into out protocol service `PeopleServic
 
 Note that the protocol belongs to the `server` side but it will be shared with the `client` modules for the `RPC` client generation.
 
-We need to share the `protocol` between the `server` and the `client` because the generated code by **Mu** 
+We need to share the `protocol` between the `server` and the `client` because the generated code by **Mu**
 will contains all the utilities for both the `RPC client` and the `RPC server` creation.
 
 We share the protocol from the `server` with the `client` using the `IDL` files
@@ -69,6 +69,13 @@ If you use `sbt "groll next"` you can see how the **protocol** should look like.
 
 We are going to start on the `server-process` module (realize that `server-common` just contains some common utils and models).
 As we explained before, we are going to implement the service generated from the protocol in this module .
+
+The logic we want for our server is the following:
+
+- If the person exists in our storage, return it.
+- If it doesn't return an error.
+- If a person is twice in the storage, return an error with an appropriate message.
+- If a request comes with an empty name, return an empty person.
 
 Once we have implemented our service logic, it's time to create the `server` app itself.
 
@@ -82,11 +89,11 @@ If you use `sbt "groll next"` you can see how the **server** should looks like.
 
 ## Step 4 - Generating a client
 
-The client follows a similar structure, so, 
+The client follows a similar structure, so,
 we'll start with the `client-process` module as well (the `client-common` has the same purpose as `server-common`).
 In this case, the `client-process` module will contain all the stuff related with our **Mu** client.
 
-We have there the **Mu** client configuration and creation, also, 
+We have there the **Mu** client configuration and creation, also,
 we'll have the `client` usages on a `tagless final algebra/handler` (easily to mock for testing).
 
 ***Note***: As a recommended pattern we usually create an `internal` model
@@ -106,12 +113,12 @@ If you use `sbt "groll next"` you can see how the **client** should look like.
 
 Let's try all this hell.
 
-The `speakers` are going to run the **server** and 
+The `speakers` are going to run the **server** and
 the `atendees` (on the same local network) will use their **clients** to send requests to the **speaker's server**.
 
-To run the **server** we just use: 
+To run the **server** we just use:
 
-```bash 
+```bash
 sbt runServer
 ```
 
@@ -119,14 +126,14 @@ To run the **client** we use `sbt runClient`. This command has two optional para
 
  - **host**: The server address. Default: `localhost`.
  - **name**: The person name we'll use on the request to the server. Default: `None`.
- 
+
 Depending of the **name** param we'll receive different responses:
 
  - Without specifying the param we'll receive an empty `Person`.
  - Setting it as `Foo` we'll get a successful response with the `Person` data.
- - With `Bar` we should receive the `duplicated person error` message. 
+ - With `Bar` we should receive the `duplicated person error` message.
  - Using another name we'll get the `not found error` message.
- 
+
 Let's try with the `Foo` name, remember to specify the server **host** if needed:
 
 ```bash

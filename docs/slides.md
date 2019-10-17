@@ -304,6 +304,16 @@ class PeopleServiceImpl extends PeopleService[IO] {
 ```
 
 
+# Server logic
+
+The logic we want for our server is the following:
+
+- If the person exists in our storage, return it.
+- If it doesn't return an error.
+- If a person is twice in the storage, return an error with an appropriate message.
+- If a request comes with an empty name, return an empty person.
+
+
 ## ServerBoot
 
 To load dependencies and services required to start the server. Here
@@ -340,7 +350,7 @@ trait PeopleServiceClient {
 }
 ```
 
-On the companion object of our algebra, 
+On the companion object of our algebra,
 we find the utility to create the **Mu** client from an **host** and a **port**.
 
 
