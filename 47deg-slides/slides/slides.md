@@ -170,7 +170,7 @@ protocol ProtocolName {
 declare them with the **record** keyword:
 
 ```java
-record Person {
+record PersonRPC {
   string name;
   int age;
 }
@@ -182,8 +182,8 @@ record Person {
 Unions in **Avro** are used to represent different cases, like **Enums**:
 
 ```java
-record PeopleResponse {
-  union { Person, NotFoundError, DuplicatedPersonError } result;
+record PeopleResponseRPC {
+  union { PersonRPC, PeopleErrorRPC } result;
 }
 ```
 
@@ -209,19 +209,20 @@ You can find more information about **Avro** syntax here: https://avro.apache.or
 
 In today's exercise, we will create a simple distributed application
 that will allow us to get information from people in our system.
+
 Think on it as a person directory.
 
 
 ## The models protocol
 
-in **People.avdl**, create:
+In **People.avdl**, create:
 
-- **Person**, with name and age.
-- **PersonError** for error with persons. It will need a message.
-- **PersonRequest**.We can ask for a particular person using a name or
-  just get the first person in the server.
-- **PersonResponse** that will contain either a **Person** or a
-  **PersonError**.
+- **PersonRPC**, with name and age.
+- **PersonErrorRPC** for error with persons. It will need a message.
+- **PersonRequestRPC**. We can ask for a particular person using a
+  name or just send an empty request.
+- **PersonResponseRPC** that will contain either a **Person** or a
+  **PersonErrorRPC**.
 
 
 ## The service protocol
@@ -231,22 +232,28 @@ Now that we have the models, we need to define the communication.
 In **PeopleService.avdl** import **People.avdl** and declare a message
 **getPerson** that:
 
-- Receives a **PeopleRequest**.
-- Returns a **PeopleResponse**.
+- Receives a **PeopleRequestRPC**.
+- Returns a **PeopleResponseRPC**.
 
 
 ## Executing the generation
 
-Now that **SBT** is configured we can use `sbt compile` task to make it
-generate our Scala sources from the IDL.
+Now that the protocol is created, we can use `sbt compile` task to generate our Scala sources from the IDL.
 
 
 ## Reviewing the generated code
+
+Under the folder
+
+`protocol/target/scala-2.12/src_managed/.../`
+
+we'll find our generated sources:
 
 - In the **People.scala** we'll have all the models.
 - In the **PeopleService.scala** we'll have a tagless final algebra
   defining our interface.
 
+---
 
 ## Creating the server from the protocol
 
@@ -327,9 +334,13 @@ Just with the **IOApp** and the main method with only one line running the
 
 ---
 
-## Connect to each other
+## Connect to us
 
-Point your client to `http://pepe-mbp.local:19683` and send messages!
+Use this command to connect to us:
+
+```sh
+sbt "runClient --host=adrian-xps.local:19683 --name=Foo"
+```
 
 ---
 

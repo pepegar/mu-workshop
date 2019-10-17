@@ -13,7 +13,7 @@ object ProjectPlugin extends AutoPlugin {
     lazy val V = new {
       val log4cats       = "1.0.1"
       val logbackClassic = "1.2.3"
-      val muRPC          = "0.18.5-SNAPSHOT"
+      val muRPC          = "0.19.0"
       val scopt          = "3.7.0"
       val silencer       = "1.4.3"
       val macroParadise  = "2.1.0"
