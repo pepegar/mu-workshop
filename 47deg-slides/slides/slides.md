@@ -8,11 +8,9 @@
 
 ## Who are we?
 
-<!-- TODO: Buscar las caricaturas, 47deg-mkt está chapao ahora... No me pones caricaturas ni muerto-->
+**@adrianrafo** Senior Software Engineer @47Degrees
 
-**@adrianrafo** Senior Software Engineer @ 47Degrees
-
-**@pepegar** Tech Lead @ 47Degrees
+**@pepegar** Tech Lead @47Degrees
 
 ---
 
@@ -308,7 +306,21 @@ the **ServerProgram**.
 - **ClientApp**
 
 
-## ClientProcess
+## PeopleServiceClient
+
+We are going to create a tagless final algebra to deal with the server calls:
+
+```scala:mdoc
+trait PeopleServiceClient {
+  // our implementation will come here
+}
+```
+
+On the companion object of our algebra,
+we find the utility to create the **Mu** client from an **host** and a **port**.
+
+
+## Client implementation
 
 The implementation of the tagless algebra for the client.
 
@@ -352,4 +364,3 @@ sbt "runClient --host=adrian-xps.local:19683 --name=Foo"
 - [https://higherkindness.io/mu](https://higherkindness.io/mu)
 - [https://avro.apache.org](https://avro.apache.org)
 - [https://grpc.io/](https://grpc.io/)
-
