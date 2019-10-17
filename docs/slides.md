@@ -261,14 +261,17 @@ In **PeopleService.avdl** import **People.avdl** and declare a message
 
 ## Executing the generation
 
-Now that the protocol is created, we can use `sbt compile` task to generate our Scala sources from the IDL.
+Now that the protocol is created, we can use **sbt compile** task to
+generate our Scala sources from the IDL.
 
 
 ## Reviewing the generated code
 
 Under the folder
 
-`protocol/target/scala-2.12/src_managed/.../`
+```sh
+protocol/target/scala-2.12/src_managed/main/.../
+```
 
 we'll find our generated sources:
 
