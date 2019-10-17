@@ -37,7 +37,7 @@ engineering world.
 
 **Mu** is an RPC library by your friendly folks @47Degrees.
 
-![Mu documentation](./img/qr-mu.png)
+![Mu documentation](./img/qr-mu-idlgen-docs.png)
 
 
 ## What is Mu for?
