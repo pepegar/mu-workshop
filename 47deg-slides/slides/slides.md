@@ -214,20 +214,22 @@ Think on it as a person directory.
 
 ## The models protocol
 
-Create:
+in **People.avdl**, create:
 
 - **Person**, with name and age.
 - **PersonError** for error with persons. It will need a message.
-- **PersonRequest**.We can ask for a particular person using a name or just get the first person in the server.
-- **PersonResponse** that will contain either a **Person** or a **PersonError**.
+- **PersonRequest**.We can ask for a particular person using a name or
+  just get the first person in the server.
+- **PersonResponse** that will contain either a **Person** or a
+  **PersonError**.
 
 
 ## The service protocol
 
 Now that we have the models, we need to define the communication.
 
-Create a new protocol named **PeopleService** that imports
-**People.avdl** and declares a message **getPerson** that:
+In **PeopleService.avdl** import **People.avdl** and declare a message
+**getPerson** that:
 
 - Receives a **PeopleRequest**.
 - Returns a **PeopleResponse**.
