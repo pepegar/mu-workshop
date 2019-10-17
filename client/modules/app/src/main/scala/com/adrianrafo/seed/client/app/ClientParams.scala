@@ -5,14 +5,19 @@ import scopt.OptionParser
 
 object ClientParams {
 
-  val default = ParamsConfig("Foo")
+  val default = ParamsConfig("localhost", None)
 
   def paramsConfig(name: String): OptionParser[ParamsConfig] =
     new scopt.OptionParser[ParamsConfig](name) {
 
+      opt[String]("host")
+        .optional()
+        .action((value, config) => config.copy(host = value))
+        .text("The host of the server")
+
       opt[String]("name")
-        .required()
-        .action((value, config) => config.copy(request = value))
+        .optional()
+        .action((value, config) => config.copy(request = Some(value)))
         .text("The name for the request")
 
     }
